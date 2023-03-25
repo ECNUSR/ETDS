@@ -1,0 +1,89 @@
+# general settings
+name: ESPCN_x4
+model_type: IRModel
+scale: 4
+num_gpu: 1
+manual_seed: 10
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: DIV2K
+    type: PairedImageDataset
+    dataroot_gt: datasets/DIV2K/train/HR/subs.lmdb
+    dataroot_lq: datasets/DIV2K/train/LR/bicubic/X4/subs.lmdb
+    filename_tmpl: '{}'
+    io_backend:
+      type: lmdb
+
+    lq_size: 64
+    use_hflip: true
+    use_vflip: true
+    use_rot: true
+    use_channels_shuffle: true
+
+    # data loader
+    use_shuffle: true
+    num_worker_per_gpu: 12
+    batch_size_per_gpu: 32
+    dataset_enlarge_ratio: 10
+    prefetch_mode: ~
+
+  val:
+    name: Set5
+    type: PairedImageDataset
+    dataroot_gt: datasets/Set5/GTmod12
+    dataroot_lq: datasets/Set5/LRbicx4
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: ESPCN
+  colors: 3
+  upscale: 4
+
+# training settings
+train:
+  ema_decay: 0.999
+  optim_g:
+    type: Adam
+    lr: !!float 0.0005
+    weight_decay: 0
+    betas: [0.9, 0.99]
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [1600000]
+    gamma: 1
+
+  total_iter: 1600000
+
+  # losses
+  losses:
+    L1Loss:
+      type: L1Loss
+      loss_weight: 1.0
+      reduction: mean
+
+# validation settings
+val:
+  val_freq: !!float 5e3
+  save_img: false
+  pbar: True
+
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: true
+
+# logging settings
+logger:
+  print_freq: 100
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true

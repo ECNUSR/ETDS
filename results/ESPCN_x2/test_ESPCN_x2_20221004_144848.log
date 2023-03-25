@@ -1,0 +1,147 @@
+2022-10-04 14:48:48,374 INFO: 
+  name: ESPCN_x2
+  model_type: IRModel
+  scale: 2
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set14/GTmod12
+      dataroot_lq: datasets/Set14/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/BSDS100/GTmod12
+      dataroot_lq: datasets/BSDS100/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/Urban100/GTmod12
+      dataroot_lq: datasets/Urban100/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_5:[
+      name: DIV2K100
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/valid/HR/original
+      dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X2/original
+      filename_tmpl: {}x2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+  ]
+  network_g:[
+    type: ESPCN
+    colors: 3
+    upscale: 2
+  ]
+  resume:[
+    network_g_path: experiments/pretrained_models/ESPCN/ESPCN_x2.pth
+    network_g_strict: True
+  ]
+  val:[
+    save_img: True
+    suffix: None
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 2
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 2
+        test_y_channel: True
+      ]
+    ]
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+  path:[
+    results_root: results/ESPCN_x2
+    log: results/ESPCN_x2
+    visualization: results/ESPCN_x2/visualization
+  ]
+
+2022-10-04 14:48:48,374 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-10-04 14:48:48,374 INFO: Number of test images in Set5: 5
+2022-10-04 14:48:48,375 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2022-10-04 14:48:48,375 INFO: Number of test images in Set14: 14
+2022-10-04 14:48:48,378 INFO: Dataset [PairedImageDataset] - B100 is built.
+2022-10-04 14:48:48,378 INFO: Number of test images in B100: 100
+2022-10-04 14:48:48,381 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2022-10-04 14:48:48,381 INFO: Number of test images in Urban100: 100
+2022-10-04 14:48:48,384 INFO: Dataset [PairedImageDataset] - DIV2K100 is built.
+2022-10-04 14:48:48,384 INFO: Number of test images in DIV2K100: 100
+2022-10-04 14:48:48,385 INFO: Network [ESPCN] is created.
+2022-10-04 14:48:55,053 INFO: ESPCN(
+  (conv1): Conv2d(3, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (conv2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv3): Conv2d(32, 12, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pixel_shuffle): PixelShuffle(upscale_factor=2)
+)
+2022-10-04 14:48:55,053 INFO: Network: ESPCN, with parameters: 26796
+2022-10-04 14:48:55,054 INFO: Loading ESPCN model from experiments/pretrained_models/ESPCN/ESPCN_x2.pth.
+2022-10-04 14:48:55,071 INFO: Model [IRModel] is created.
+2022-10-04 14:48:55,071 INFO: Testing Set5...
+2022-10-04 14:48:59,857 INFO: Validation [epoch ESPCN_x2] Set5
+	 # psnr: 36.8565	Best: 36.8565 @ ESPCN_x2 iter
+	 # ssim: 0.9559	Best: 0.9559 @ ESPCN_x2 iter
+
+2022-10-04 14:48:59,857 INFO: Testing Set14...
+2022-10-04 14:49:02,547 INFO: Validation [epoch ESPCN_x2] Set14
+	 # psnr: 32.6197	Best: 32.6197 @ ESPCN_x2 iter
+	 # ssim: 0.9086	Best: 0.9086 @ ESPCN_x2 iter
+
+2022-10-04 14:49:02,547 INFO: Testing B100...
+2022-10-04 14:49:09,681 INFO: Validation [epoch ESPCN_x2] B100
+	 # psnr: 31.4018	Best: 31.4018 @ ESPCN_x2 iter
+	 # ssim: 0.8898	Best: 0.8898 @ ESPCN_x2 iter
+
+2022-10-04 14:49:09,681 INFO: Testing Urban100...
+2022-10-04 14:49:46,046 INFO: Validation [epoch ESPCN_x2] Urban100
+	 # psnr: 29.6136	Best: 29.6136 @ ESPCN_x2 iter
+	 # ssim: 0.8973	Best: 0.8973 @ ESPCN_x2 iter
+
+2022-10-04 14:49:46,046 INFO: Testing DIV2K100...
+2022-10-04 14:51:40,355 INFO: Validation [epoch ESPCN_x2] DIV2K100
+	 # psnr: 34.7822	Best: 34.7822 @ ESPCN_x2 iter
+	 # ssim: 0.9347	Best: 0.9347 @ ESPCN_x2 iter
+

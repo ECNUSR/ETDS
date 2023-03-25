@@ -1,0 +1,76 @@
+# general settings
+name: ECBSR_M4C32_x4
+model_type: IRModel
+scale: 4
+num_gpu: 1
+manual_seed: 0
+
+# dataset and data loader settings
+datasets:
+  test_1:
+    name: Set5
+    type: PairedImageDataset
+    dataroot_gt: datasets/Set5/GTmod12
+    dataroot_lq: datasets/Set5/LRbicx4
+    io_backend:
+      type: disk
+  test_2:
+    name: Set14
+    type: PairedImageDataset
+    dataroot_gt: datasets/Set14/GTmod12
+    dataroot_lq: datasets/Set14/LRbicx4
+    io_backend:
+      type: disk
+  test_3:
+    name: B100
+    type: PairedImageDataset
+    dataroot_gt: datasets/BSDS100/GTmod12
+    dataroot_lq: datasets/BSDS100/LRbicx4
+    io_backend:
+      type: disk
+  test_4:
+    name: Urban100
+    type: PairedImageDataset
+    dataroot_gt: datasets/Urban100/GTmod12
+    dataroot_lq: datasets/Urban100/LRbicx4
+    io_backend:
+      type: disk
+  test_5:
+    name: DIV2K100
+    type: PairedImageDataset
+    dataroot_gt: datasets/DIV2K/valid/HR/original
+    dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X4/original
+    filename_tmpl: '{}x4'
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: ECBSRT
+  num_in_ch: 3
+  num_out_ch: 3
+  upscale: 4
+  num_block: 4
+  num_feat: 32
+  act_type: 'prelu'
+
+# resume
+resume:
+  network_g_path: experiments/pretrained_models/ECBSR/ECBSR_M4C32_x4.pth
+  network_g_strict: true
+
+# validation settings
+val:
+  save_img: true
+  suffix: ~
+  pbar: True
+
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim
+      crop_border: 4
+      test_y_channel: true

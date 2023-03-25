@@ -1,0 +1,179 @@
+2022-10-05 04:14:34,892 INFO: 
+  name: ABPN_ET_M6C40_x2
+  model_type: IRModel
+  scale: 2
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set14/GTmod12
+      dataroot_lq: datasets/Set14/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/BSDS100/GTmod12
+      dataroot_lq: datasets/BSDS100/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/Urban100/GTmod12
+      dataroot_lq: datasets/Urban100/LRbicx2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+    test_5:[
+      name: DIV2K100
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/valid/HR/original
+      dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X2/original
+      filename_tmpl: {}x2
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 2
+    ]
+  ]
+  network_g:[
+    type: ABPN_ET
+    num_feat: 40
+    num_block: 6
+    scale: 2
+  ]
+  resume:[
+    network_g_path: experiments/pretrained_models/ABPN/ABPN_ET_M6C40_x2.pth
+    network_g_strict: True
+  ]
+  val:[
+    save_img: True
+    suffix: None
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 2
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 2
+        test_y_channel: True
+      ]
+    ]
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+  path:[
+    results_root: results/ABPN_ET_M6C40_x2
+    log: results/ABPN_ET_M6C40_x2
+    visualization: results/ABPN_ET_M6C40_x2/visualization
+  ]
+
+2022-10-05 04:14:34,892 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-10-05 04:14:34,892 INFO: Number of test images in Set5: 5
+2022-10-05 04:14:34,893 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2022-10-05 04:14:34,893 INFO: Number of test images in Set14: 14
+2022-10-05 04:14:34,895 INFO: Dataset [PairedImageDataset] - B100 is built.
+2022-10-05 04:14:34,895 INFO: Number of test images in B100: 100
+2022-10-05 04:14:34,898 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2022-10-05 04:14:34,898 INFO: Number of test images in Urban100: 100
+2022-10-05 04:14:34,901 INFO: Dataset [PairedImageDataset] - DIV2K100 is built.
+2022-10-05 04:14:34,901 INFO: Number of test images in DIV2K100: 100
+2022-10-05 04:14:34,904 INFO: Network [ABPN_ET] is created.
+2022-10-05 04:14:35,993 INFO: ABPN_ET(
+  (backbone): Sequential(
+    (0): Conv2d(3, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): Sequential(
+      (0): Conv2d(44, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+    )
+    (3): Sequential(
+      (0): Conv2d(44, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+    )
+    (4): Sequential(
+      (0): Conv2d(44, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+    )
+    (5): Sequential(
+      (0): Conv2d(44, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+    )
+    (6): Sequential(
+      (0): Conv2d(44, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+    )
+    (7): Sequential(
+      (0): Conv2d(44, 44, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+    )
+    (8): Conv2d(44, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): ReLU()
+    (10): Conv2d(16, 12, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU()
+    (12): Conv2d(12, 12, kernel_size=(1, 1), stride=(1, 1))
+    (13): ReLU()
+  )
+  (upsampler): PixelShuffle(upscale_factor=2)
+)
+2022-10-05 04:14:35,993 INFO: Network: ABPN_ET, with parameters: 114288
+2022-10-05 04:14:35,994 INFO: Loading ABPN_ET model from experiments/pretrained_models/ABPN/ABPN_ET_M6C40_x2.pth.
+2022-10-05 04:14:35,997 INFO: Model [IRModel] is created.
+2022-10-05 04:14:35,997 INFO: Testing Set5...
+2022-10-05 04:14:37,156 INFO: Validation [epoch ABPN_ET_M6C40_x2] Set5
+	 # psnr: 37.5791	Best: 37.5791 @ ABPN_ET_M6C40_x2 iter
+	 # ssim: 0.9594	Best: 0.9594 @ ABPN_ET_M6C40_x2 iter
+
+2022-10-05 04:14:37,156 INFO: Testing Set14...
+2022-10-05 04:14:38,414 INFO: Validation [epoch ABPN_ET_M6C40_x2] Set14
+	 # psnr: 33.1602	Best: 33.1602 @ ABPN_ET_M6C40_x2 iter
+	 # ssim: 0.9140	Best: 0.9140 @ ABPN_ET_M6C40_x2 iter
+
+2022-10-05 04:14:38,414 INFO: Testing B100...
+2022-10-05 04:14:42,951 INFO: Validation [epoch ABPN_ET_M6C40_x2] B100
+	 # psnr: 31.9245	Best: 31.9245 @ ABPN_ET_M6C40_x2 iter
+	 # ssim: 0.8971	Best: 0.8971 @ ABPN_ET_M6C40_x2 iter
+
+2022-10-05 04:14:42,951 INFO: Testing Urban100...
+2022-10-05 04:15:07,861 INFO: Validation [epoch ABPN_ET_M6C40_x2] Urban100
+	 # psnr: 31.0448	Best: 31.0448 @ ABPN_ET_M6C40_x2 iter
+	 # ssim: 0.9169	Best: 0.9169 @ ABPN_ET_M6C40_x2 iter
+
+2022-10-05 04:15:07,861 INFO: Testing DIV2K100...
+2022-10-05 04:16:33,132 INFO: Validation [epoch ABPN_ET_M6C40_x2] DIV2K100
+	 # psnr: 35.5933	Best: 35.5933 @ ABPN_ET_M6C40_x2 iter
+	 # ssim: 0.9414	Best: 0.9414 @ ABPN_ET_M6C40_x2 iter
+

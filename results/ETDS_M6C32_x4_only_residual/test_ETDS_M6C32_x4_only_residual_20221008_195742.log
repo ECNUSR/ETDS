@@ -1,0 +1,172 @@
+2022-10-08 19:57:42,317 INFO: 
+  name: ETDS_M6C32_x4_only_residual
+  model_type: ETDSModel
+  scale: 4
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set14/GTmod12
+      dataroot_lq: datasets/Set14/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/BSDS100/GTmod12
+      dataroot_lq: datasets/BSDS100/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/Urban100/GTmod12
+      dataroot_lq: datasets/Urban100/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_5:[
+      name: DIV2K100
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/valid/HR/original
+      dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X4/original
+      filename_tmpl: {}x4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+  ]
+  network_g:[
+    type: ETDSAblationResidual
+    num_in_ch: 3
+    num_out_ch: 3
+    upscale: 4
+    num_block: 6
+    num_feat: 32
+    num_residual_feat: 3
+  ]
+  resume:[
+    network_g_path: experiments/pretrained_models/ETDS/ablations/ETDS_M6C32_x4_only_residual.pth
+    network_g_strict: True
+  ]
+  train:[
+    fixed_residual_model_iters: None
+    interpolation_loss_weight: None
+  ]
+  val:[
+    save_img: True
+    suffix: None
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 4
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 4
+        test_y_channel: True
+      ]
+    ]
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+  path:[
+    results_root: results/ETDS_M6C32_x4_only_residual
+    log: results/ETDS_M6C32_x4_only_residual
+    visualization: results/ETDS_M6C32_x4_only_residual/visualization
+  ]
+
+2022-10-08 19:57:42,318 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-10-08 19:57:42,318 INFO: Number of test images in Set5: 5
+2022-10-08 19:57:42,318 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2022-10-08 19:57:42,319 INFO: Number of test images in Set14: 14
+2022-10-08 19:57:42,321 INFO: Dataset [PairedImageDataset] - B100 is built.
+2022-10-08 19:57:42,321 INFO: Number of test images in B100: 100
+2022-10-08 19:57:42,324 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2022-10-08 19:57:42,324 INFO: Number of test images in Urban100: 100
+2022-10-08 19:57:42,327 INFO: Dataset [PairedImageDataset] - DIV2K100 is built.
+2022-10-08 19:57:42,328 INFO: Number of test images in DIV2K100: 100
+2022-10-08 19:57:42,354 INFO: Network [ETDSAblationResidual] is created.
+2022-10-08 19:57:45,129 INFO: ETDSAblationResidual(
+  (conv_first): Conv2d(3, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_residual_first): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (backbone_convs): ModuleList(
+    (0): Conv2d(29, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): Conv2d(29, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (2): Conv2d(29, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): Conv2d(29, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): Conv2d(29, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): Conv2d(29, 29, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (residual_convs): ModuleList(
+    (0): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (2): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): Conv2d(3, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (conv_last): Conv2d(29, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_residual_last): Conv2d(3, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (upsampler): PixelShuffle(upscale_factor=4)
+)
+2022-10-08 19:57:45,130 INFO: Network: ETDSAblationResidual, with parameters: 60908
+2022-10-08 19:57:45,133 INFO: Loading ETDSAblationResidual model from experiments/pretrained_models/ETDS/ablations/ETDS_M6C32_x4_only_residual.pth.
+2022-10-08 19:57:45,216 INFO: Model [ETDSModel] is created.
+2022-10-08 19:57:45,217 INFO: Testing Set5...
+2022-10-08 19:57:50,295 INFO: Validation [epoch ETDS_M6C32_x4_only_residual] Set5
+	 # psnr: 31.3646	Best: 31.3646 @ ETDS_M6C32_x4_only_residual iter
+	 # ssim: 0.8835	Best: 0.8835 @ ETDS_M6C32_x4_only_residual iter
+
+2022-10-08 19:57:50,295 INFO: Testing Set14...
+2022-10-08 19:57:52,769 INFO: Validation [epoch ETDS_M6C32_x4_only_residual] Set14
+	 # psnr: 28.1050	Best: 28.1050 @ ETDS_M6C32_x4_only_residual iter
+	 # ssim: 0.7701	Best: 0.7701 @ ETDS_M6C32_x4_only_residual iter
+
+2022-10-08 19:57:52,770 INFO: Testing B100...
+2022-10-08 19:58:02,727 INFO: Validation [epoch ETDS_M6C32_x4_only_residual] B100
+	 # psnr: 27.2426	Best: 27.2426 @ ETDS_M6C32_x4_only_residual iter
+	 # ssim: 0.7260	Best: 0.7260 @ ETDS_M6C32_x4_only_residual iter
+
+2022-10-08 19:58:02,728 INFO: Testing Urban100...
+2022-10-08 19:58:48,792 INFO: Validation [epoch ETDS_M6C32_x4_only_residual] Urban100
+	 # psnr: 25.1590	Best: 25.1590 @ ETDS_M6C32_x4_only_residual iter
+	 # ssim: 0.7526	Best: 0.7526 @ ETDS_M6C32_x4_only_residual iter
+
+2022-10-08 19:58:48,794 INFO: Testing DIV2K100...
+2022-10-08 20:04:26,183 INFO: Validation [epoch ETDS_M6C32_x4_only_residual] DIV2K100
+	 # psnr: 29.8915	Best: 29.8915 @ ETDS_M6C32_x4_only_residual iter
+	 # ssim: 0.8243	Best: 0.8243 @ ETDS_M6C32_x4_only_residual iter
+

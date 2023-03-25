@@ -1,0 +1,544 @@
+2022-09-28 01:07:45,180 INFO: 
+  name: ESPCN_x4
+  model_type: IRModel
+  scale: 4
+  num_gpu: 1
+  manual_seed: 10
+  datasets:[
+    train:[
+      name: DIV2K
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/train/HR/subs.lmdb
+      dataroot_lq: datasets/DIV2K/train/LR/bicubic/X4/subs.lmdb
+      filename_tmpl: {}
+      io_backend:[
+        type: lmdb
+      ]
+      lq_size: 64
+      use_hflip: True
+      use_vflip: True
+      use_rot: True
+      use_channels_shuffle: True
+      use_shuffle: True
+      num_worker_per_gpu: 12
+      batch_size_per_gpu: 32
+      dataset_enlarge_ratio: 10
+      prefetch_mode: None
+      phase: train
+      scale: 4
+    ]
+    val:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: val
+      scale: 4
+    ]
+  ]
+  network_g:[
+    type: ESPCN
+    colors: 3
+    upscale: 4
+  ]
+  train:[
+    ema_decay: 0.999
+    optim_g:[
+      type: Adam
+      lr: 0.0005
+      weight_decay: 0
+      betas: [0.9, 0.99]
+    ]
+    scheduler:[
+      type: MultiStepLR
+      milestones: [1600000]
+      gamma: 1
+    ]
+    total_iter: 1600000
+    losses:[
+      L1Loss:[
+        type: L1Loss
+        loss_weight: 1.0
+        reduction: mean
+      ]
+    ]
+  ]
+  val:[
+    val_freq: 5000.0
+    save_img: False
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 4
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 4
+        test_y_channel: True
+      ]
+    ]
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 5000.0
+    use_tb_logger: True
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: True
+  resume:[
+  ]
+  path:[
+    experiments_root: experiments/ESPCN_x4
+    models: experiments/ESPCN_x4/models
+    training_states: experiments/ESPCN_x4/training_states
+    log: experiments/ESPCN_x4
+    visualization: experiments/ESPCN_x4/visualization
+  ]
+
+2022-09-28 01:07:45,635 INFO: Dataset [PairedImageDataset] - DIV2K is built.
+2022-09-28 01:07:45,635 INFO: Training statistics:
+	Number of train images: 32592
+	Dataset enlarge ratio: 10
+	Batch size per gpu: 32
+	World size (gpu number): 1
+	Require iter number per epoch: 10185
+	Total epochs: 158; iters: 1600000.
+2022-09-28 01:07:45,636 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-09-28 01:07:45,636 INFO: Number of val images/folders in Set5: 5
+2022-09-28 01:07:45,638 INFO: Network [ESPCN] is created.
+2022-09-28 01:07:52,886 INFO: ESPCN(
+  (conv1): Conv2d(3, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (conv2): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv3): Conv2d(32, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (pixel_shuffle): PixelShuffle(upscale_factor=4)
+)
+2022-09-28 01:07:52,886 INFO: Network: ESPCN, with parameters: 37200
+2022-09-28 01:07:52,886 INFO: Use Exponential Moving Average with decay: 0.999
+2022-09-28 01:07:52,887 INFO: Network [ESPCN] is created.
+2022-09-28 01:07:52,889 INFO: Loss [L1Loss] is created.
+2022-09-28 01:07:52,889 INFO: Model [IRModel] is created.
+2022-09-28 01:07:53,928 INFO: Start training from epoch: 0, iter: 0
+2022-09-28 01:09:27,199 INFO: [ESPCN..][epoch:  0, iter:     100, lr:(5.000e-04,)] [eta: 12 days, 10:30:05, time (data): 0.637 (0.535)] L1Loss: 6.2170e-02 
+2022-09-28 01:13:22,540 INFO: [ESPCN..][epoch:  0, iter:     200, lr:(5.000e-04,)] [eta: 27 days, 22:17:42, time (data): 1.495 (1.372)] L1Loss: 5.7540e-02 
+2022-09-28 01:18:48,101 INFO: [ESPCN..][epoch:  0, iter:     300, lr:(5.000e-04,)] [eta: 38 days, 16:11:52, time (data): 3.136 (3.125)] L1Loss: 5.7728e-02 
+2022-09-28 01:26:29,834 INFO: [ESPCN..][epoch:  0, iter:     400, lr:(5.000e-04,)] [eta: 50 days, 8:18:44, time (data): 3.875 (3.865)] L1Loss: 5.2879e-02 
+2022-09-28 01:37:47,200 INFO: [ESPCN..][epoch:  0, iter:     500, lr:(5.000e-04,)] [eta: 65 days, 7:47:08, time (data): 6.910 (6.902)] L1Loss: 4.3339e-02 
+2022-09-28 01:54:57,740 INFO: [ESPCN..][epoch:  0, iter:     600, lr:(5.000e-04,)] [eta: 86 days, 4:38:50, time (data): 8.620 (8.612)] L1Loss: 5.0649e-02 
+2022-09-28 02:21:15,962 INFO: [ESPCN..][epoch:  0, iter:     700, lr:(5.000e-04,)] [eta: 115 days, 13:36:54, time (data): 14.502 (14.493)] L1Loss: 5.3672e-02 
+2022-09-28 02:37:53,986 INFO: [ESPCN..][epoch:  0, iter:     800, lr:(5.000e-04,)] [eta: 124 days, 4:40:56, time (data): 12.200 (12.190)] L1Loss: 5.0141e-02 
+2022-09-28 02:43:17,800 INFO: [ESPCN..][epoch:  0, iter:     900, lr:(5.000e-04,)] [eta: 117 days, 1:20:17, time (data): 3.321 (3.304)] L1Loss: 4.2328e-02 
+2022-09-28 02:48:59,050 INFO: [ESPCN..][epoch:  0, iter:   1,000, lr:(5.000e-04,)] [eta: 111 days, 15:56:48, time (data): 3.366 (3.350)] L1Loss: 5.1902e-02 
+2022-09-28 02:55:12,868 INFO: [ESPCN..][epoch:  0, iter:   1,100, lr:(5.000e-04,)] [eta: 107 days, 19:10:51, time (data): 3.571 (3.558)] L1Loss: 4.8450e-02 
+2022-09-28 03:00:48,275 INFO: [ESPCN..][epoch:  0, iter:   1,200, lr:(5.000e-04,)] [eta: 103 days, 23:38:31, time (data): 3.456 (3.441)] L1Loss: 4.4264e-02 
+2022-09-28 03:06:53,054 INFO: [ESPCN..][epoch:  0, iter:   1,300, lr:(5.000e-04,)] [eta: 101 days, 4:11:12, time (data): 3.418 (3.402)] L1Loss: 5.7081e-02 
+2022-09-28 03:17:36,434 INFO: [ESPCN..][epoch:  0, iter:   1,400, lr:(5.000e-04,)] [eta: 102 days, 10:39:01, time (data): 4.967 (4.951)] L1Loss: 5.0545e-02 
+2022-09-28 03:24:53,304 INFO: [ESPCN..][epoch:  0, iter:   1,500, lr:(5.000e-04,)] [eta: 100 days, 23:56:29, time (data): 3.944 (3.922)] L1Loss: 4.7065e-02 
+2022-09-28 03:34:15,006 INFO: [ESPCN..][epoch:  0, iter:   1,600, lr:(5.000e-04,)] [eta: 101 days, 4:10:21, time (data): 4.809 (4.788)] L1Loss: 4.2987e-02 
+2022-09-28 03:41:24,906 INFO: [ESPCN..][epoch:  0, iter:   1,700, lr:(5.000e-04,)] [eta: 99 days, 21:29:11, time (data): 4.405 (4.382)] L1Loss: 3.9622e-02 
+2022-09-28 03:48:06,346 INFO: [ESPCN..][epoch:  0, iter:   1,800, lr:(5.000e-04,)] [eta: 98 days, 11:10:46, time (data): 4.199 (4.176)] L1Loss: 4.8963e-02 
+2022-09-28 03:55:06,173 INFO: [ESPCN..][epoch:  0, iter:   1,900, lr:(5.000e-04,)] [eta: 97 days, 8:45:49, time (data): 4.177 (4.157)] L1Loss: 4.3918e-02 
+2022-09-28 04:02:32,488 INFO: [ESPCN..][epoch:  0, iter:   2,000, lr:(5.000e-04,)] [eta: 96 days, 14:51:09, time (data): 4.321 (4.300)] L1Loss: 4.1501e-02 
+2022-09-28 04:10:44,473 INFO: [ESPCN..][epoch:  0, iter:   2,100, lr:(5.000e-04,)] [eta: 96 days, 8:16:59, time (data): 5.061 (5.040)] L1Loss: 4.0069e-02 
+2022-09-28 04:19:50,115 INFO: [ESPCN..][epoch:  0, iter:   2,200, lr:(5.000e-04,)] [eta: 96 days, 13:07:05, time (data): 5.261 (5.239)] L1Loss: 4.1434e-02 
+2022-09-28 04:28:31,812 INFO: [ESPCN..][epoch:  0, iter:   2,300, lr:(5.000e-04,)] [eta: 96 days, 12:54:03, time (data): 5.240 (5.217)] L1Loss: 4.1277e-02 
+2022-09-28 04:36:49,326 INFO: [ESPCN..][epoch:  0, iter:   2,400, lr:(5.000e-04,)] [eta: 96 days, 8:13:13, time (data): 5.093 (5.071)] L1Loss: 4.1112e-02 
+2022-09-28 04:45:19,015 INFO: [ESPCN..][epoch:  0, iter:   2,500, lr:(5.000e-04,)] [eta: 96 days, 6:03:47, time (data): 4.890 (4.866)] L1Loss: 4.6060e-02 
+2022-09-28 04:54:52,212 INFO: [ESPCN..][epoch:  0, iter:   2,600, lr:(5.000e-04,)] [eta: 96 days, 14:53:42, time (data): 5.334 (5.310)] L1Loss: 4.4409e-02 
+2022-09-28 05:04:01,407 INFO: [ESPCN..][epoch:  0, iter:   2,700, lr:(5.000e-04,)] [eta: 96 days, 19:07:07, time (data): 5.475 (5.452)] L1Loss: 4.3841e-02 
+2022-09-28 05:10:46,623 INFO: [ESPCN..][epoch:  0, iter:   2,800, lr:(5.000e-04,)] [eta: 96 days, 0:13:26, time (data): 4.709 (4.686)] L1Loss: 4.6664e-02 
+2022-09-28 05:17:29,369 INFO: [ESPCN..][epoch:  0, iter:   2,900, lr:(5.000e-04,)] [eta: 95 days, 6:14:47, time (data): 3.811 (3.795)] L1Loss: 4.6784e-02 
+2022-09-28 05:24:04,558 INFO: [ESPCN..][epoch:  0, iter:   3,000, lr:(5.000e-04,)] [eta: 94 days, 12:20:33, time (data): 3.882 (3.866)] L1Loss: 3.7943e-02 
+2022-09-28 05:30:01,983 INFO: [ESPCN..][epoch:  0, iter:   3,100, lr:(5.000e-04,)] [eta: 93 days, 14:11:03, time (data): 3.701 (3.687)] L1Loss: 4.2411e-02 
+2022-09-28 05:37:24,228 INFO: [ESPCN..][epoch:  0, iter:   3,200, lr:(5.000e-04,)] [eta: 93 days, 5:09:27, time (data): 4.086 (4.071)] L1Loss: 4.5197e-02 
+2022-09-28 05:46:23,798 INFO: [ESPCN..][epoch:  0, iter:   3,300, lr:(5.000e-04,)] [eta: 93 days, 9:44:49, time (data): 5.430 (5.418)] L1Loss: 4.9190e-02 
+2022-09-28 05:53:30,083 INFO: [ESPCN..][epoch:  0, iter:   3,400, lr:(5.000e-04,)] [eta: 92 days, 23:17:06, time (data): 4.791 (4.779)] L1Loss: 4.5558e-02 
+2022-09-28 06:06:42,641 INFO: [ESPCN..][epoch:  0, iter:   3,500, lr:(5.000e-04,)] [eta: 94 days, 11:48:35, time (data): 8.728 (8.710)] L1Loss: 4.3608e-02 
+2022-09-28 06:17:09,430 INFO: [ESPCN..][epoch:  0, iter:   3,600, lr:(5.000e-04,)] [eta: 95 days, 1:52:49, time (data): 7.383 (7.363)] L1Loss: 4.1630e-02 
+2022-09-28 06:25:58,111 INFO: [ESPCN..][epoch:  0, iter:   3,700, lr:(5.000e-04,)] [eta: 95 days, 3:25:36, time (data): 5.582 (5.560)] L1Loss: 4.5401e-02 
+2022-09-28 06:36:12,158 INFO: [ESPCN..][epoch:  0, iter:   3,800, lr:(5.000e-04,)] [eta: 95 days, 14:50:31, time (data): 5.884 (5.861)] L1Loss: 4.1033e-02 
+2022-09-28 06:47:13,324 INFO: [ESPCN..][epoch:  0, iter:   3,900, lr:(5.000e-04,)] [eta: 96 days, 7:01:06, time (data): 5.807 (5.782)] L1Loss: 3.9120e-02 
+2022-09-28 06:56:43,397 INFO: [ESPCN..][epoch:  0, iter:   4,000, lr:(5.000e-04,)] [eta: 96 days, 12:17:00, time (data): 5.743 (5.718)] L1Loss: 4.1595e-02 
+2022-09-28 07:06:41,601 INFO: [ESPCN..][epoch:  0, iter:   4,100, lr:(5.000e-04,)] [eta: 96 days, 20:19:30, time (data): 5.617 (5.596)] L1Loss: 4.1878e-02 
+2022-09-28 07:16:13,775 INFO: [ESPCN..][epoch:  0, iter:   4,200, lr:(5.000e-04,)] [eta: 97 days, 1:13:44, time (data): 5.670 (5.649)] L1Loss: 3.9073e-02 
+2022-09-28 07:26:03,033 INFO: [ESPCN..][epoch:  0, iter:   4,300, lr:(5.000e-04,)] [eta: 97 days, 7:39:29, time (data): 6.260 (6.239)] L1Loss: 4.2780e-02 
+2022-09-28 07:35:30,263 INFO: [ESPCN..][epoch:  0, iter:   4,400, lr:(5.000e-04,)] [eta: 97 days, 11:34:10, time (data): 5.928 (5.907)] L1Loss: 4.0816e-02 
+2022-09-28 07:44:31,458 INFO: [ESPCN..][epoch:  0, iter:   4,500, lr:(5.000e-04,)] [eta: 97 days, 12:44:11, time (data): 5.609 (5.588)] L1Loss: 3.7849e-02 
+2022-09-28 07:54:14,468 INFO: [ESPCN..][epoch:  0, iter:   4,600, lr:(5.000e-04,)] [eta: 97 days, 17:52:25, time (data): 5.731 (5.709)] L1Loss: 3.4876e-02 
+2022-09-28 08:04:42,112 INFO: [ESPCN..][epoch:  0, iter:   4,700, lr:(5.000e-04,)] [eta: 98 days, 2:59:34, time (data): 6.141 (6.119)] L1Loss: 3.6400e-02 
+2022-09-28 08:15:40,648 INFO: [ESPCN..][epoch:  0, iter:   4,800, lr:(5.000e-04,)] [eta: 98 days, 14:34:34, time (data): 6.386 (6.364)] L1Loss: 4.1800e-02 
+2022-09-28 08:24:39,073 INFO: [ESPCN..][epoch:  0, iter:   4,900, lr:(5.000e-04,)] [eta: 98 days, 14:49:13, time (data): 5.216 (5.194)] L1Loss: 3.9978e-02 
+2022-09-28 08:35:15,718 INFO: [ESPCN..][epoch:  0, iter:   5,000, lr:(5.000e-04,)] [eta: 98 days, 23:45:02, time (data): 5.868 (5.846)] L1Loss: 3.5183e-02 
+2022-09-28 08:35:16,715 INFO: Saving models and training states.
+2022-09-28 08:38:06,006 INFO: Validation [epoch 5000] Set5
+	 # psnr: 27.8925	Best: 27.8925 @ 5000 iter
+	 # ssim: 0.8261	Best: 0.8261 @ 5000 iter
+
+2022-09-28 08:46:53,918 INFO: [ESPCN..][epoch:  0, iter:   5,100, lr:(5.000e-04,)] [eta: 99 days, 13:40:11, time (data): 6.352 (6.327)] L1Loss: 4.8178e-02 
+2022-09-28 08:58:09,625 INFO: [ESPCN..][epoch:  0, iter:   5,200, lr:(5.000e-04,)] [eta: 100 days, 1:07:49, time (data): 6.578 (6.555)] L1Loss: 3.4594e-02 
+2022-09-28 09:09:24,612 INFO: [ESPCN..][epoch:  0, iter:   5,300, lr:(5.000e-04,)] [eta: 100 days, 12:05:29, time (data): 7.411 (7.391)] L1Loss: 3.6408e-02 
+2022-09-28 09:20:42,954 INFO: [ESPCN..][epoch:  0, iter:   5,400, lr:(5.000e-04,)] [eta: 100 days, 22:54:52, time (data): 7.048 (7.026)] L1Loss: 3.6969e-02 
+2022-09-28 09:30:56,437 INFO: [ESPCN..][epoch:  0, iter:   5,500, lr:(5.000e-04,)] [eta: 101 days, 4:06:55, time (data): 6.693 (6.673)] L1Loss: 4.4796e-02 
+2022-09-28 09:41:05,257 INFO: [ESPCN..][epoch:  0, iter:   5,600, lr:(5.000e-04,)] [eta: 101 days, 8:45:20, time (data): 6.337 (6.316)] L1Loss: 3.5230e-02 
+2022-09-28 09:52:30,036 INFO: [ESPCN..][epoch:  0, iter:   5,700, lr:(5.000e-04,)] [eta: 101 days, 19:07:40, time (data): 5.817 (5.792)] L1Loss: 3.5986e-02 
+2022-09-28 10:02:15,119 INFO: [ESPCN..][epoch:  0, iter:   5,800, lr:(5.000e-04,)] [eta: 101 days, 21:31:31, time (data): 5.836 (5.813)] L1Loss: 4.0194e-02 
+2022-09-28 10:11:44,124 INFO: [ESPCN..][epoch:  0, iter:   5,900, lr:(5.000e-04,)] [eta: 101 days, 22:37:46, time (data): 5.780 (5.756)] L1Loss: 3.5965e-02 
+2022-09-28 10:23:20,319 INFO: [ESPCN..][epoch:  0, iter:   6,000, lr:(5.000e-04,)] [eta: 102 days, 9:04:34, time (data): 6.469 (6.446)] L1Loss: 3.1911e-02 
+2022-09-28 10:27:21,624 INFO: [ESPCN..][epoch:  0, iter:   6,100, lr:(5.000e-04,)] [eta: 101 days, 10:09:46, time (data): 2.056 (2.033)] L1Loss: 3.3454e-02 
+2022-09-28 10:29:59,580 INFO: [ESPCN..][epoch:  0, iter:   6,200, lr:(5.000e-04,)] [eta: 100 days, 6:02:08, time (data): 1.776 (1.752)] L1Loss: 3.9755e-02 
+2022-09-28 10:35:25,262 INFO: [ESPCN..][epoch:  0, iter:   6,300, lr:(5.000e-04,)] [eta: 99 days, 14:35:01, time (data): 3.638 (3.613)] L1Loss: 3.5157e-02 
+2022-09-28 10:39:25,277 INFO: [ESPCN..][epoch:  0, iter:   6,400, lr:(5.000e-04,)] [eta: 98 days, 17:41:14, time (data): 2.901 (2.877)] L1Loss: 3.9303e-02 
+2022-09-28 10:42:32,132 INFO: [ESPCN..][epoch:  0, iter:   6,500, lr:(5.000e-04,)] [eta: 97 days, 17:48:44, time (data): 1.833 (1.811)] L1Loss: 3.7666e-02 
+2022-09-28 10:46:52,703 INFO: [ESPCN..][epoch:  0, iter:   6,600, lr:(5.000e-04,)] [eta: 96 days, 23:36:07, time (data): 2.290 (2.267)] L1Loss: 3.7466e-02 
+2022-09-28 10:50:49,610 INFO: [ESPCN..][epoch:  0, iter:   6,700, lr:(5.000e-04,)] [eta: 96 days, 4:22:12, time (data): 2.359 (2.336)] L1Loss: 3.6655e-02 
+2022-09-28 10:54:56,452 INFO: [ESPCN..][epoch:  0, iter:   6,800, lr:(5.000e-04,)] [eta: 95 days, 10:20:53, time (data): 2.419 (2.396)] L1Loss: 3.8463e-02 
+2022-09-28 10:58:50,249 INFO: [ESPCN..][epoch:  0, iter:   6,900, lr:(5.000e-04,)] [eta: 94 days, 16:00:36, time (data): 2.377 (2.356)] L1Loss: 3.6558e-02 
+2022-09-28 11:03:27,649 INFO: [ESPCN..][epoch:  0, iter:   7,000, lr:(5.000e-04,)] [eta: 94 days, 0:57:00, time (data): 2.614 (2.591)] L1Loss: 3.9681e-02 
+2022-09-28 11:08:06,725 INFO: [ESPCN..][epoch:  0, iter:   7,100, lr:(5.000e-04,)] [eta: 93 days, 10:24:59, time (data): 2.945 (2.921)] L1Loss: 3.9284e-02 
+2022-09-28 11:12:58,794 INFO: [ESPCN..][epoch:  0, iter:   7,200, lr:(5.000e-04,)] [eta: 92 days, 21:04:57, time (data): 2.925 (2.902)] L1Loss: 3.7116e-02 
+2022-09-28 11:18:05,249 INFO: [ESPCN..][epoch:  0, iter:   7,300, lr:(5.000e-04,)] [eta: 92 days, 8:59:00, time (data): 3.392 (3.368)] L1Loss: 2.9168e-02 
+2022-09-28 11:22:39,524 INFO: [ESPCN..][epoch:  0, iter:   7,400, lr:(5.000e-04,)] [eta: 91 days, 19:17:08, time (data): 2.995 (2.971)] L1Loss: 4.0508e-02 
+2022-09-28 11:27:10,243 INFO: [ESPCN..][epoch:  0, iter:   7,500, lr:(5.000e-04,)] [eta: 91 days, 5:44:28, time (data): 2.216 (2.193)] L1Loss: 3.5678e-02 
+2022-09-28 11:31:42,668 INFO: [ESPCN..][epoch:  0, iter:   7,600, lr:(5.000e-04,)] [eta: 90 days, 16:39:01, time (data): 2.525 (2.503)] L1Loss: 3.3320e-02 
+2022-09-28 11:35:56,581 INFO: [ESPCN..][epoch:  0, iter:   7,700, lr:(5.000e-04,)] [eta: 90 days, 2:50:03, time (data): 2.567 (2.545)] L1Loss: 3.3579e-02 
+2022-09-28 11:40:19,991 INFO: [ESPCN..][epoch:  0, iter:   7,800, lr:(5.000e-04,)] [eta: 89 days, 13:54:33, time (data): 2.603 (2.581)] L1Loss: 3.0163e-02 
+2022-09-28 11:44:22,952 INFO: [ESPCN..][epoch:  0, iter:   7,900, lr:(5.000e-04,)] [eta: 89 days, 0:09:53, time (data): 2.511 (2.488)] L1Loss: 3.7058e-02 
+2022-09-28 11:48:27,785 INFO: [ESPCN..][epoch:  0, iter:   8,000, lr:(5.000e-04,)] [eta: 88 days, 10:51:56, time (data): 2.471 (2.448)] L1Loss: 3.7212e-02 
+2022-09-28 11:52:56,500 INFO: [ESPCN..][epoch:  0, iter:   8,100, lr:(5.000e-04,)] [eta: 87 days, 23:11:48, time (data): 2.382 (2.357)] L1Loss: 2.6958e-02 
+2022-09-28 11:57:45,513 INFO: [ESPCN..][epoch:  0, iter:   8,200, lr:(5.000e-04,)] [eta: 87 days, 12:54:18, time (data): 2.699 (2.676)] L1Loss: 3.6512e-02 
+2022-09-28 12:01:52,473 INFO: [ESPCN..][epoch:  0, iter:   8,300, lr:(5.000e-04,)] [eta: 87 days, 0:37:10, time (data): 2.742 (2.720)] L1Loss: 3.3036e-02 
+2022-09-28 12:05:55,387 INFO: [ESPCN..][epoch:  0, iter:   8,400, lr:(5.000e-04,)] [eta: 86 days, 12:24:43, time (data): 2.539 (2.518)] L1Loss: 3.0971e-02 
+2022-09-28 12:10:09,909 INFO: [ESPCN..][epoch:  0, iter:   8,500, lr:(5.000e-04,)] [eta: 86 days, 1:05:36, time (data): 2.371 (2.349)] L1Loss: 3.2730e-02 
+2022-09-28 12:14:11,275 INFO: [ESPCN..][epoch:  0, iter:   8,600, lr:(5.000e-04,)] [eta: 85 days, 13:21:38, time (data): 2.391 (2.370)] L1Loss: 4.1170e-02 
+2022-09-28 12:19:06,080 INFO: [ESPCN..][epoch:  0, iter:   8,700, lr:(5.000e-04,)] [eta: 85 days, 4:36:38, time (data): 2.258 (2.235)] L1Loss: 3.6309e-02 
+2022-09-28 12:23:04,223 INFO: [ESPCN..][epoch:  0, iter:   8,800, lr:(5.000e-04,)] [eta: 84 days, 17:12:42, time (data): 2.332 (2.311)] L1Loss: 2.8562e-02 
+2022-09-28 12:27:05,863 INFO: [ESPCN..][epoch:  0, iter:   8,900, lr:(5.000e-04,)] [eta: 84 days, 6:14:29, time (data): 2.703 (2.681)] L1Loss: 4.4183e-02 
+2022-09-28 12:31:25,364 INFO: [ESPCN..][epoch:  0, iter:   9,000, lr:(5.000e-04,)] [eta: 83 days, 20:23:25, time (data): 2.632 (2.610)] L1Loss: 3.2443e-02 
+2022-09-28 12:36:04,220 INFO: [ESPCN..][epoch:  0, iter:   9,100, lr:(5.000e-04,)] [eta: 83 days, 11:41:37, time (data): 2.566 (2.543)] L1Loss: 3.1178e-02 
+2022-09-28 12:40:57,347 INFO: [ESPCN..][epoch:  0, iter:   9,200, lr:(5.000e-04,)] [eta: 83 days, 3:52:12, time (data): 2.800 (2.777)] L1Loss: 3.6070e-02 
+2022-09-28 12:45:55,966 INFO: [ESPCN..][epoch:  0, iter:   9,300, lr:(5.000e-04,)] [eta: 82 days, 20:28:25, time (data): 3.118 (3.096)] L1Loss: 2.9423e-02 
+2022-09-28 12:50:23,515 INFO: [ESPCN..][epoch:  0, iter:   9,400, lr:(5.000e-04,)] [eta: 82 days, 11:46:22, time (data): 2.826 (2.803)] L1Loss: 2.8133e-02 
+2022-09-28 12:55:05,790 INFO: [ESPCN..][epoch:  0, iter:   9,500, lr:(5.000e-04,)] [eta: 82 days, 3:56:17, time (data): 2.829 (2.804)] L1Loss: 3.3876e-02 
+2022-09-28 12:59:10,785 INFO: [ESPCN..][epoch:  0, iter:   9,600, lr:(5.000e-04,)] [eta: 81 days, 18:32:58, time (data): 2.575 (2.550)] L1Loss: 3.3082e-02 
+2022-09-28 13:04:16,465 INFO: [ESPCN..][epoch:  0, iter:   9,700, lr:(5.000e-04,)] [eta: 81 days, 12:07:00, time (data): 2.759 (2.733)] L1Loss: 3.7077e-02 
+2022-09-28 13:09:06,371 INFO: [ESPCN..][epoch:  0, iter:   9,800, lr:(5.000e-04,)] [eta: 81 days, 5:06:08, time (data): 2.845 (2.820)] L1Loss: 3.1781e-02 
+2022-09-28 13:13:29,672 INFO: [ESPCN..][epoch:  0, iter:   9,900, lr:(5.000e-04,)] [eta: 80 days, 21:02:29, time (data): 2.801 (2.777)] L1Loss: 3.3279e-02 
+2022-09-28 13:17:30,230 INFO: [ESPCN..][epoch:  0, iter:  10,000, lr:(5.000e-04,)] [eta: 80 days, 12:08:08, time (data): 2.534 (2.510)] L1Loss: 2.8161e-02 
+2022-09-28 13:17:31,396 INFO: Saving models and training states.
+2022-09-28 13:17:38,977 INFO: Validation [epoch 10000] Set5
+	 # psnr: 29.1827	Best: 29.1827 @ 10000 iter
+	 # ssim: 0.8333	Best: 0.8333 @ 10000 iter
+
+2022-09-28 13:22:10,496 INFO: [ESPCN..][epoch:  0, iter:  10,100, lr:(5.000e-04,)] [eta: 80 days, 5:08:27, time (data): 3.165 (3.148)] L1Loss: 2.5214e-02 
+2022-09-28 13:28:26,618 INFO: [ESPCN..][epoch:  1, iter:  10,200, lr:(5.000e-04,)] [eta: 80 days, 2:25:54, time (data): 3.556 (3.535)] L1Loss: 3.4143e-02 
+2022-09-28 13:33:14,152 INFO: [ESPCN..][epoch:  1, iter:  10,300, lr:(5.000e-04,)] [eta: 79 days, 19:58:31, time (data): 3.125 (3.103)] L1Loss: 3.0505e-02 
+2022-09-28 13:37:25,741 INFO: [ESPCN..][epoch:  1, iter:  10,400, lr:(5.000e-04,)] [eta: 79 days, 12:06:56, time (data): 2.714 (2.691)] L1Loss: 3.1871e-02 
+2022-09-28 13:41:22,142 INFO: [ESPCN..][epoch:  1, iter:  10,500, lr:(5.000e-04,)] [eta: 79 days, 3:45:56, time (data): 2.000 (1.976)] L1Loss: 3.3728e-02 
+2022-09-28 13:44:43,755 INFO: [ESPCN..][epoch:  1, iter:  10,600, lr:(5.000e-04,)] [eta: 78 days, 18:07:24, time (data): 2.009 (1.986)] L1Loss: 3.0959e-02 
+2022-09-28 13:49:03,433 INFO: [ESPCN..][epoch:  1, iter:  10,700, lr:(5.000e-04,)] [eta: 78 days, 11:03:19, time (data): 2.916 (2.890)] L1Loss: 3.3744e-02 
+2022-09-28 13:53:11,965 INFO: [ESPCN..][epoch:  1, iter:  10,800, lr:(5.000e-04,)] [eta: 78 days, 3:39:42, time (data): 2.621 (2.598)] L1Loss: 3.3509e-02 
+2022-09-28 13:56:46,367 INFO: [ESPCN..][epoch:  1, iter:  10,900, lr:(5.000e-04,)] [eta: 77 days, 19:01:13, time (data): 2.286 (2.265)] L1Loss: 3.2018e-02 
+2022-09-28 14:00:39,043 INFO: [ESPCN..][epoch:  1, iter:  11,000, lr:(5.000e-04,)] [eta: 77 days, 11:16:05, time (data): 2.308 (2.285)] L1Loss: 2.6890e-02 
+2022-09-28 14:05:23,249 INFO: [ESPCN..][epoch:  1, iter:  11,100, lr:(5.000e-04,)] [eta: 77 days, 5:42:11, time (data): 2.875 (2.849)] L1Loss: 2.9112e-02 
+2022-09-28 14:08:42,090 INFO: [ESPCN..][epoch:  1, iter:  11,200, lr:(5.000e-04,)] [eta: 76 days, 20:52:21, time (data): 2.260 (2.237)] L1Loss: 3.0623e-02 
+2022-09-28 14:12:31,532 INFO: [ESPCN..][epoch:  1, iter:  11,300, lr:(5.000e-04,)] [eta: 76 days, 13:23:32, time (data): 1.900 (1.877)] L1Loss: 3.0013e-02 
+2022-09-28 14:16:46,913 INFO: [ESPCN..][epoch:  1, iter:  11,400, lr:(5.000e-04,)] [eta: 76 days, 7:02:46, time (data): 2.348 (2.326)] L1Loss: 3.3388e-02 
+2022-09-28 14:21:00,479 INFO: [ESPCN..][epoch:  1, iter:  11,500, lr:(5.000e-04,)] [eta: 76 days, 0:44:22, time (data): 2.412 (2.387)] L1Loss: 4.0959e-02 
+2022-09-28 14:25:46,219 INFO: [ESPCN..][epoch:  1, iter:  11,600, lr:(5.000e-04,)] [eta: 75 days, 19:45:50, time (data): 2.717 (2.694)] L1Loss: 2.8623e-02 
+2022-09-28 14:29:56,432 INFO: [ESPCN..][epoch:  1, iter:  11,700, lr:(5.000e-04,)] [eta: 75 days, 13:31:58, time (data): 2.323 (2.301)] L1Loss: 3.4478e-02 
+2022-09-28 14:34:06,902 INFO: [ESPCN..][epoch:  1, iter:  11,800, lr:(5.000e-04,)] [eta: 75 days, 7:24:55, time (data): 2.448 (2.425)] L1Loss: 2.8298e-02 
+2022-09-28 14:38:23,695 INFO: [ESPCN..][epoch:  1, iter:  11,900, lr:(5.000e-04,)] [eta: 75 days, 1:38:03, time (data): 2.627 (2.604)] L1Loss: 3.5407e-02 
+2022-09-28 14:42:35,316 INFO: [ESPCN..][epoch:  1, iter:  12,000, lr:(5.000e-04,)] [eta: 74 days, 19:45:28, time (data): 2.543 (2.519)] L1Loss: 3.4408e-02 
+2022-09-28 14:46:37,930 INFO: [ESPCN..][epoch:  1, iter:  12,100, lr:(5.000e-04,)] [eta: 74 days, 13:38:57, time (data): 1.961 (1.936)] L1Loss: 2.8885e-02 
+2022-09-28 14:51:15,322 INFO: [ESPCN..][epoch:  1, iter:  12,200, lr:(5.000e-04,)] [eta: 74 days, 8:53:49, time (data): 2.540 (2.515)] L1Loss: 2.7384e-02 
+2022-09-28 14:55:13,672 INFO: [ESPCN..][epoch:  1, iter:  12,300, lr:(5.000e-04,)] [eta: 74 days, 2:49:15, time (data): 2.412 (2.388)] L1Loss: 3.4185e-02 
+2022-09-28 14:59:12,875 INFO: [ESPCN..][epoch:  1, iter:  12,400, lr:(5.000e-04,)] [eta: 73 days, 20:52:19, time (data): 2.391 (2.369)] L1Loss: 2.9054e-02 
+2022-09-28 15:04:27,619 INFO: [ESPCN..][epoch:  1, iter:  12,500, lr:(5.000e-04,)] [eta: 73 days, 17:40:55, time (data): 3.533 (3.513)] L1Loss: 3.0173e-02 
+2022-09-28 15:08:25,403 INFO: [ESPCN..][epoch:  1, iter:  12,600, lr:(5.000e-04,)] [eta: 73 days, 11:50:53, time (data): 2.685 (2.662)] L1Loss: 3.0463e-02 
+2022-09-28 15:12:42,402 INFO: [ESPCN..][epoch:  1, iter:  12,700, lr:(5.000e-04,)] [eta: 73 days, 6:46:19, time (data): 2.195 (2.175)] L1Loss: 3.3275e-02 
+2022-09-28 15:16:33,102 INFO: [ESPCN..][epoch:  1, iter:  12,800, lr:(5.000e-04,)] [eta: 73 days, 0:52:06, time (data): 2.276 (2.256)] L1Loss: 3.1282e-02 
+2022-09-28 15:21:56,556 INFO: [ESPCN..][epoch:  1, iter:  12,900, lr:(5.000e-04,)] [eta: 72 days, 22:13:30, time (data): 3.663 (3.642)] L1Loss: 3.1985e-02 
+2022-09-28 15:26:57,076 INFO: [ESPCN..][epoch:  1, iter:  13,000, lr:(5.000e-04,)] [eta: 72 days, 18:50:36, time (data): 3.177 (3.154)] L1Loss: 3.5259e-02 
+2022-09-28 15:31:29,217 INFO: [ESPCN..][epoch:  1, iter:  13,100, lr:(5.000e-04,)] [eta: 72 days, 14:33:25, time (data): 3.138 (3.117)] L1Loss: 3.4296e-02 
+2022-09-28 15:36:21,447 INFO: [ESPCN..][epoch:  1, iter:  13,200, lr:(5.000e-04,)] [eta: 72 days, 11:00:19, time (data): 2.974 (2.951)] L1Loss: 2.8985e-02 
+2022-09-28 15:40:13,894 INFO: [ESPCN..][epoch:  1, iter:  13,300, lr:(5.000e-04,)] [eta: 72 days, 5:31:30, time (data): 2.289 (2.266)] L1Loss: 2.9894e-02 
+2022-09-28 15:44:51,627 INFO: [ESPCN..][epoch:  1, iter:  13,400, lr:(5.000e-04,)] [eta: 72 days, 1:36:52, time (data): 2.647 (2.623)] L1Loss: 3.8370e-02 
+2022-09-28 15:49:19,944 INFO: [ESPCN..][epoch:  1, iter:  13,500, lr:(5.000e-04,)] [eta: 71 days, 21:27:13, time (data): 2.347 (2.324)] L1Loss: 3.0094e-02 
+2022-09-28 15:53:53,936 INFO: [ESPCN..][epoch:  1, iter:  13,600, lr:(5.000e-04,)] [eta: 71 days, 17:32:12, time (data): 2.636 (2.613)] L1Loss: 3.4852e-02 
+2022-09-28 15:57:12,206 INFO: [ESPCN..][epoch:  1, iter:  13,700, lr:(5.000e-04,)] [eta: 71 days, 11:14:26, time (data): 1.777 (1.753)] L1Loss: 2.9955e-02 
+2022-09-28 16:01:36,233 INFO: [ESPCN..][epoch:  1, iter:  13,800, lr:(5.000e-04,)] [eta: 71 days, 7:08:02, time (data): 2.429 (2.406)] L1Loss: 3.2286e-02 
+2022-09-28 16:05:43,910 INFO: [ESPCN..][epoch:  1, iter:  13,900, lr:(5.000e-04,)] [eta: 71 days, 2:34:03, time (data): 2.917 (2.896)] L1Loss: 2.8697e-02 
+2022-09-28 16:09:47,926 INFO: [ESPCN..][epoch:  1, iter:  14,000, lr:(5.000e-04,)] [eta: 70 days, 21:57:00, time (data): 2.546 (2.521)] L1Loss: 3.6339e-02 
+2022-09-28 16:14:22,657 INFO: [ESPCN..][epoch:  1, iter:  14,100, lr:(5.000e-04,)] [eta: 70 days, 18:21:23, time (data): 2.611 (2.591)] L1Loss: 3.1664e-02 
+2022-09-28 16:18:50,280 INFO: [ESPCN..][epoch:  1, iter:  14,200, lr:(5.000e-04,)] [eta: 70 days, 14:35:32, time (data): 2.655 (2.633)] L1Loss: 3.3262e-02 
+2022-09-28 16:23:18,849 INFO: [ESPCN..][epoch:  1, iter:  14,300, lr:(5.000e-04,)] [eta: 70 days, 10:54:31, time (data): 2.318 (2.296)] L1Loss: 2.8702e-02 
+2022-09-28 16:27:11,726 INFO: [ESPCN..][epoch:  1, iter:  14,400, lr:(5.000e-04,)] [eta: 70 days, 6:11:00, time (data): 2.323 (2.300)] L1Loss: 2.4028e-02 
+2022-09-28 16:32:21,314 INFO: [ESPCN..][epoch:  1, iter:  14,500, lr:(5.000e-04,)] [eta: 70 days, 3:51:08, time (data): 3.881 (3.865)] L1Loss: 2.2144e-02 
+2022-09-28 16:36:24,829 INFO: [ESPCN..][epoch:  1, iter:  14,600, lr:(5.000e-04,)] [eta: 69 days, 23:33:33, time (data): 2.744 (2.722)] L1Loss: 3.2913e-02 
+2022-09-28 16:40:52,299 INFO: [ESPCN..][epoch:  1, iter:  14,700, lr:(5.000e-04,)] [eta: 69 days, 20:02:28, time (data): 2.836 (2.813)] L1Loss: 3.5947e-02 
+2022-09-28 16:45:46,973 INFO: [ESPCN..][epoch:  1, iter:  14,800, lr:(5.000e-04,)] [eta: 69 days, 17:22:44, time (data): 2.916 (2.892)] L1Loss: 2.5585e-02 
+2022-09-28 16:50:01,840 INFO: [ESPCN..][epoch:  1, iter:  14,900, lr:(5.000e-04,)] [eta: 69 days, 13:34:30, time (data): 2.430 (2.407)] L1Loss: 3.0862e-02 
+2022-09-28 16:54:55,938 INFO: [ESPCN..][epoch:  1, iter:  15,000, lr:(5.000e-04,)] [eta: 69 days, 10:58:21, time (data): 2.828 (2.807)] L1Loss: 2.6979e-02 
+2022-09-28 16:54:56,701 INFO: Saving models and training states.
+2022-09-28 16:55:03,905 INFO: Validation [epoch 15000] Set5
+	 # psnr: 29.4188	Best: 29.4188 @ 15000 iter
+	 # ssim: 0.8372	Best: 0.8372 @ 15000 iter
+
+2022-09-28 16:59:37,236 INFO: [ESPCN..][epoch:  1, iter:  15,100, lr:(5.000e-04,)] [eta: 69 days, 8:01:48, time (data): 2.321 (2.297)] L1Loss: 3.2467e-02 
+2022-09-28 17:04:47,039 INFO: [ESPCN..][epoch:  1, iter:  15,200, lr:(5.000e-04,)] [eta: 69 days, 5:57:03, time (data): 2.937 (2.914)] L1Loss: 3.0721e-02 
+2022-09-28 17:09:27,578 INFO: [ESPCN..][epoch:  1, iter:  15,300, lr:(5.000e-04,)] [eta: 69 days, 3:03:20, time (data): 2.653 (2.630)] L1Loss: 3.1590e-02 
+2022-09-28 17:13:41,992 INFO: [ESPCN..][epoch:  1, iter:  15,400, lr:(5.000e-04,)] [eta: 68 days, 23:27:02, time (data): 2.557 (2.534)] L1Loss: 3.3061e-02 
+2022-09-28 17:19:12,055 INFO: [ESPCN..][epoch:  1, iter:  15,500, lr:(5.000e-04,)] [eta: 68 days, 22:02:20, time (data): 2.771 (2.750)] L1Loss: 2.6265e-02 
+2022-09-28 17:23:57,076 INFO: [ESPCN..][epoch:  1, iter:  15,600, lr:(5.000e-04,)] [eta: 68 days, 19:22:25, time (data): 2.835 (2.813)] L1Loss: 2.9448e-02 
+2022-09-28 17:29:13,172 INFO: [ESPCN..][epoch:  1, iter:  15,700, lr:(5.000e-04,)] [eta: 68 days, 17:36:44, time (data): 3.489 (3.465)] L1Loss: 2.9332e-02 
+2022-09-28 17:33:37,354 INFO: [ESPCN..][epoch:  1, iter:  15,800, lr:(5.000e-04,)] [eta: 68 days, 14:25:35, time (data): 2.786 (2.764)] L1Loss: 3.3193e-02 
+2022-09-28 17:38:20,777 INFO: [ESPCN..][epoch:  1, iter:  15,900, lr:(5.000e-04,)] [eta: 68 days, 11:48:43, time (data): 3.071 (3.045)] L1Loss: 3.8164e-02 
+2022-09-28 17:42:56,162 INFO: [ESPCN..][epoch:  1, iter:  16,000, lr:(5.000e-04,)] [eta: 68 days, 9:00:30, time (data): 2.807 (2.783)] L1Loss: 3.1138e-02 
+2022-09-28 17:47:34,515 INFO: [ESPCN..][epoch:  1, iter:  16,100, lr:(5.000e-04,)] [eta: 68 days, 6:19:10, time (data): 2.968 (2.949)] L1Loss: 2.6360e-02 
+2022-09-28 17:52:00,263 INFO: [ESPCN..][epoch:  1, iter:  16,200, lr:(5.000e-04,)] [eta: 68 days, 3:19:15, time (data): 2.703 (2.683)] L1Loss: 2.9374e-02 
+2022-09-28 17:56:34,265 INFO: [ESPCN..][epoch:  1, iter:  16,300, lr:(5.000e-04,)] [eta: 68 days, 0:34:50, time (data): 2.017 (1.996)] L1Loss: 2.7670e-02 
+2022-09-28 18:01:26,482 INFO: [ESPCN..][epoch:  1, iter:  16,400, lr:(5.000e-04,)] [eta: 67 days, 22:21:42, time (data): 2.768 (2.745)] L1Loss: 3.1457e-02 
+2022-09-28 18:06:13,293 INFO: [ESPCN..][epoch:  1, iter:  16,500, lr:(5.000e-04,)] [eta: 67 days, 20:01:27, time (data): 3.148 (3.121)] L1Loss: 2.5089e-02 
+2022-09-28 18:10:36,111 INFO: [ESPCN..][epoch:  1, iter:  16,600, lr:(5.000e-04,)] [eta: 67 days, 17:04:43, time (data): 2.700 (2.677)] L1Loss: 2.7316e-02 
+2022-09-28 18:15:28,848 INFO: [ESPCN..][epoch:  1, iter:  16,700, lr:(5.000e-04,)] [eta: 67 days, 14:57:18, time (data): 2.386 (2.360)] L1Loss: 3.1748e-02 
+2022-09-28 18:20:42,383 INFO: [ESPCN..][epoch:  1, iter:  16,800, lr:(5.000e-04,)] [eta: 67 days, 13:24:01, time (data): 3.021 (2.997)] L1Loss: 3.5586e-02 
+2022-09-28 18:24:55,214 INFO: [ESPCN..][epoch:  1, iter:  16,900, lr:(5.000e-04,)] [eta: 67 days, 10:17:00, time (data): 1.857 (1.834)] L1Loss: 3.5734e-02 
+2022-09-28 18:29:51,608 INFO: [ESPCN..][epoch:  1, iter:  17,000, lr:(5.000e-04,)] [eta: 67 days, 8:19:45, time (data): 2.804 (2.782)] L1Loss: 3.6249e-02 
+2022-09-28 18:35:00,100 INFO: [ESPCN..][epoch:  1, iter:  17,100, lr:(5.000e-04,)] [eta: 67 days, 6:42:28, time (data): 5.821 (5.794)] L1Loss: 2.3508e-02 
+2022-09-28 18:38:54,862 INFO: [ESPCN..][epoch:  1, iter:  17,200, lr:(5.000e-04,)] [eta: 67 days, 3:13:11, time (data): 2.793 (2.769)] L1Loss: 3.3791e-02 
+2022-09-28 18:43:21,617 INFO: [ESPCN..][epoch:  1, iter:  17,300, lr:(5.000e-04,)] [eta: 67 days, 0:35:03, time (data): 2.463 (2.433)] L1Loss: 3.8579e-02 
+2022-09-28 18:48:04,540 INFO: [ESPCN..][epoch:  1, iter:  17,400, lr:(5.000e-04,)] [eta: 66 days, 22:23:11, time (data): 2.776 (2.755)] L1Loss: 2.6798e-02 
+2022-09-28 18:52:31,018 INFO: [ESPCN..][epoch:  1, iter:  17,500, lr:(5.000e-04,)] [eta: 66 days, 19:48:00, time (data): 3.013 (2.991)] L1Loss: 3.3243e-02 
+2022-09-28 18:57:14,774 INFO: [ESPCN..][epoch:  1, iter:  17,600, lr:(5.000e-04,)] [eta: 66 days, 17:40:25, time (data): 2.853 (2.829)] L1Loss: 2.8741e-02 
+2022-09-28 19:02:26,979 INFO: [ESPCN..][epoch:  1, iter:  17,700, lr:(5.000e-04,)] [eta: 66 days, 16:16:36, time (data): 2.546 (2.522)] L1Loss: 2.7649e-02 
+2022-09-28 19:07:20,457 INFO: [ESPCN..][epoch:  1, iter:  17,800, lr:(5.000e-04,)] [eta: 66 days, 14:25:56, time (data): 2.883 (2.861)] L1Loss: 2.7157e-02 
+2022-09-28 19:11:37,828 INFO: [ESPCN..][epoch:  1, iter:  17,900, lr:(5.000e-04,)] [eta: 66 days, 11:43:15, time (data): 2.711 (2.691)] L1Loss: 3.8337e-02 
+2022-09-28 19:16:35,902 INFO: [ESPCN..][epoch:  1, iter:  18,000, lr:(5.000e-04,)] [eta: 66 days, 10:01:58, time (data): 2.950 (2.926)] L1Loss: 2.7564e-02 
+2022-09-28 19:20:36,251 INFO: [ESPCN..][epoch:  1, iter:  18,100, lr:(5.000e-04,)] [eta: 66 days, 6:57:39, time (data): 3.090 (3.066)] L1Loss: 3.1114e-02 
+2022-09-28 19:25:19,262 INFO: [ESPCN..][epoch:  1, iter:  18,200, lr:(5.000e-04,)] [eta: 66 days, 4:57:07, time (data): 2.845 (2.822)] L1Loss: 2.6189e-02 
+2022-09-28 19:30:27,116 INFO: [ESPCN..][epoch:  1, iter:  18,300, lr:(5.000e-04,)] [eta: 66 days, 3:33:37, time (data): 3.131 (3.111)] L1Loss: 3.2289e-02 
+2022-09-28 19:35:12,693 INFO: [ESPCN..][epoch:  1, iter:  18,400, lr:(5.000e-04,)] [eta: 66 days, 1:39:05, time (data): 2.870 (2.848)] L1Loss: 2.8167e-02 
+2022-09-28 19:39:52,280 INFO: [ESPCN..][epoch:  1, iter:  18,500, lr:(5.000e-04,)] [eta: 65 days, 23:37:11, time (data): 0.029 (0.005)] L1Loss: 2.6690e-02 
+2022-09-28 19:45:06,428 INFO: [ESPCN..][epoch:  1, iter:  18,600, lr:(5.000e-04,)] [eta: 65 days, 22:25:31, time (data): 2.908 (2.885)] L1Loss: 2.6026e-02 
+2022-09-28 19:49:40,910 INFO: [ESPCN..][epoch:  1, iter:  18,700, lr:(5.000e-04,)] [eta: 65 days, 20:18:40, time (data): 3.046 (3.030)] L1Loss: 3.3822e-02 
+2022-09-28 19:54:35,995 INFO: [ESPCN..][epoch:  1, iter:  18,800, lr:(5.000e-04,)] [eta: 65 days, 18:42:00, time (data): 2.954 (2.930)] L1Loss: 2.4277e-02 
+2022-09-28 19:59:10,195 INFO: [ESPCN..][epoch:  1, iter:  18,900, lr:(5.000e-04,)] [eta: 65 days, 16:37:11, time (data): 0.332 (0.308)] L1Loss: 3.0476e-02 
+2022-09-28 20:03:39,180 INFO: [ESPCN..][epoch:  1, iter:  19,000, lr:(5.000e-04,)] [eta: 65 days, 14:26:24, time (data): 2.548 (2.525)] L1Loss: 3.1883e-02 
+2022-09-28 20:08:46,321 INFO: [ESPCN..][epoch:  1, iter:  19,100, lr:(5.000e-04,)] [eta: 65 days, 13:09:34, time (data): 0.038 (0.006)] L1Loss: 3.2283e-02 
+2022-09-28 20:13:08,872 INFO: [ESPCN..][epoch:  1, iter:  19,200, lr:(5.000e-04,)] [eta: 65 days, 10:52:18, time (data): 2.495 (2.472)] L1Loss: 3.1929e-02 
+2022-09-28 20:18:52,808 INFO: [ESPCN..][epoch:  1, iter:  19,300, lr:(5.000e-04,)] [eta: 65 days, 10:27:30, time (data): 4.130 (4.109)] L1Loss: 3.6263e-02 
+2022-09-28 20:23:36,292 INFO: [ESPCN..][epoch:  1, iter:  19,400, lr:(5.000e-04,)] [eta: 65 days, 8:40:48, time (data): 2.875 (2.852)] L1Loss: 2.6328e-02 
+2022-09-28 20:28:24,235 INFO: [ESPCN..][epoch:  1, iter:  19,500, lr:(5.000e-04,)] [eta: 65 days, 7:01:11, time (data): 0.034 (0.006)] L1Loss: 2.9154e-02 
+2022-09-28 20:33:47,614 INFO: [ESPCN..][epoch:  1, iter:  19,600, lr:(5.000e-04,)] [eta: 65 days, 6:10:09, time (data): 3.131 (3.109)] L1Loss: 3.2338e-02 
+2022-09-28 20:38:25,947 INFO: [ESPCN..][epoch:  1, iter:  19,700, lr:(5.000e-04,)] [eta: 65 days, 4:19:21, time (data): 9.327 (9.307)] L1Loss: 3.3829e-02 
+2022-09-28 20:43:35,096 INFO: [ESPCN..][epoch:  1, iter:  19,800, lr:(5.000e-04,)] [eta: 65 days, 3:10:37, time (data): 3.209 (3.186)] L1Loss: 3.2762e-02 
+2022-09-28 20:48:31,175 INFO: [ESPCN..][epoch:  1, iter:  19,900, lr:(5.000e-04,)] [eta: 65 days, 1:45:14, time (data): 0.019 (0.004)] L1Loss: 3.6670e-02 
+2022-09-28 20:53:15,561 INFO: [ESPCN..][epoch:  1, iter:  20,000, lr:(5.000e-04,)] [eta: 65 days, 0:05:15, time (data): 2.807 (2.784)] L1Loss: 3.0347e-02 
+2022-09-28 20:53:15,860 INFO: Saving models and training states.
+2022-09-28 20:53:24,367 INFO: Validation [epoch 20000] Set5
+	 # psnr: 29.5106	Best: 29.5106 @ 20000 iter
+	 # ssim: 0.8390	Best: 0.8390 @ 20000 iter
+
+2022-09-28 20:58:35,260 INFO: [ESPCN..][epoch:  1, iter:  20,100, lr:(5.000e-04,)] [eta: 64 days, 23:12:29, time (data): 2.957 (2.934)] L1Loss: 3.2895e-02 
+2022-09-28 21:04:29,713 INFO: [ESPCN..][epoch:  1, iter:  20,200, lr:(5.000e-04,)] [eta: 64 days, 23:05:28, time (data): 3.531 (3.508)] L1Loss: 3.2856e-02 
+2022-09-28 21:09:39,002 INFO: [ESPCN..][epoch:  1, iter:  20,300, lr:(5.000e-04,)] [eta: 64 days, 21:59:54, time (data): 3.307 (3.284)] L1Loss: 2.8827e-02 
+2022-09-28 21:14:55,153 INFO: [ESPCN..][epoch:  2, iter:  20,400, lr:(5.000e-04,)] [eta: 64 days, 21:03:47, time (data): 3.138 (3.114)] L1Loss: 3.3931e-02 
+2022-09-28 21:19:13,986 INFO: [ESPCN..][epoch:  2, iter:  20,500, lr:(5.000e-04,)] [eta: 64 days, 18:54:33, time (data): 2.857 (2.834)] L1Loss: 3.5908e-02 
+2022-09-28 21:25:24,191 INFO: [ESPCN..][epoch:  2, iter:  20,600, lr:(5.000e-04,)] [eta: 64 days, 19:08:51, time (data): 3.768 (3.744)] L1Loss: 3.2195e-02 
+2022-09-28 21:30:44,554 INFO: [ESPCN..][epoch:  2, iter:  20,700, lr:(5.000e-04,)] [eta: 64 days, 18:19:34, time (data): 3.478 (3.453)] L1Loss: 3.0184e-02 
+2022-09-28 21:35:25,590 INFO: [ESPCN..][epoch:  2, iter:  20,800, lr:(5.000e-04,)] [eta: 64 days, 16:40:57, time (data): 2.536 (2.513)] L1Loss: 3.3966e-02 
+2022-09-28 21:39:08,048 INFO: [ESPCN..][epoch:  2, iter:  20,900, lr:(5.000e-04,)] [eta: 64 days, 13:49:28, time (data): 2.373 (2.350)] L1Loss: 3.3166e-02 
+2022-09-28 21:43:15,262 INFO: [ESPCN..][epoch:  2, iter:  21,000, lr:(5.000e-04,)] [eta: 64 days, 11:30:37, time (data): 2.443 (2.420)] L1Loss: 3.3730e-02 
+2022-09-28 21:47:32,656 INFO: [ESPCN..][epoch:  2, iter:  21,100, lr:(5.000e-04,)] [eta: 64 days, 9:25:44, time (data): 2.505 (2.483)] L1Loss: 3.0278e-02 
+2022-09-28 21:52:13,949 INFO: [ESPCN..][epoch:  2, iter:  21,200, lr:(5.000e-04,)] [eta: 64 days, 7:51:38, time (data): 2.659 (2.636)] L1Loss: 3.2868e-02 
+2022-09-28 21:56:01,374 INFO: [ESPCN..][epoch:  2, iter:  21,300, lr:(5.000e-04,)] [eta: 64 days, 5:11:51, time (data): 2.460 (2.436)] L1Loss: 3.5871e-02 
+2022-09-28 22:00:34,059 INFO: [ESPCN..][epoch:  2, iter:  21,400, lr:(5.000e-04,)] [eta: 64 days, 3:29:10, time (data): 2.885 (2.863)] L1Loss: 3.0982e-02 
+2022-09-28 22:04:49,517 INFO: [ESPCN..][epoch:  2, iter:  21,500, lr:(5.000e-04,)] [eta: 64 days, 1:26:19, time (data): 2.714 (2.692)] L1Loss: 3.2595e-02 
+2022-09-28 22:08:53,737 INFO: [ESPCN..][epoch:  2, iter:  21,600, lr:(5.000e-04,)] [eta: 63 days, 23:10:52, time (data): 2.326 (2.304)] L1Loss: 3.4754e-02 
+2022-09-28 22:13:29,456 INFO: [ESPCN..][epoch:  2, iter:  21,700, lr:(5.000e-04,)] [eta: 63 days, 21:34:49, time (data): 2.548 (2.526)] L1Loss: 2.7918e-02 
+2022-09-28 22:18:11,364 INFO: [ESPCN..][epoch:  2, iter:  21,800, lr:(5.000e-04,)] [eta: 63 days, 20:07:05, time (data): 2.945 (2.924)] L1Loss: 3.2883e-02 
+2022-09-28 22:22:37,844 INFO: [ESPCN..][epoch:  2, iter:  21,900, lr:(5.000e-04,)] [eta: 63 days, 18:21:34, time (data): 2.796 (2.775)] L1Loss: 2.1726e-02 
+2022-09-28 22:26:54,488 INFO: [ESPCN..][epoch:  2, iter:  22,000, lr:(5.000e-04,)] [eta: 63 days, 16:25:13, time (data): 2.460 (2.438)] L1Loss: 2.6595e-02 
+2022-09-28 22:31:22,525 INFO: [ESPCN..][epoch:  2, iter:  22,100, lr:(5.000e-04,)] [eta: 63 days, 14:43:26, time (data): 2.570 (2.548)] L1Loss: 3.1851e-02 
+2022-09-28 22:35:42,967 INFO: [ESPCN..][epoch:  2, iter:  22,200, lr:(5.000e-04,)] [eta: 63 days, 12:53:32, time (data): 2.529 (2.505)] L1Loss: 2.9937e-02 
+2022-09-28 22:38:42,257 INFO: [ESPCN..][epoch:  2, iter:  22,300, lr:(5.000e-04,)] [eta: 63 days, 9:28:54, time (data): 2.137 (2.114)] L1Loss: 2.8004e-02 
+2022-09-28 22:42:47,945 INFO: [ESPCN..][epoch:  2, iter:  22,400, lr:(5.000e-04,)] [eta: 63 days, 7:23:59, time (data): 2.538 (2.518)] L1Loss: 3.4920e-02 
+2022-09-28 22:46:52,856 INFO: [ESPCN..][epoch:  2, iter:  22,500, lr:(5.000e-04,)] [eta: 63 days, 5:19:15, time (data): 2.486 (2.464)] L1Loss: 2.7918e-02 
+2022-09-28 22:51:04,739 INFO: [ESPCN..][epoch:  2, iter:  22,600, lr:(5.000e-04,)] [eta: 63 days, 3:23:41, time (data): 2.516 (2.492)] L1Loss: 2.3702e-02 
+2022-09-28 22:54:51,549 INFO: [ESPCN..][epoch:  2, iter:  22,700, lr:(5.000e-04,)] [eta: 63 days, 1:00:05, time (data): 2.384 (2.360)] L1Loss: 3.3294e-02 
+2022-09-28 22:59:00,226 INFO: [ESPCN..][epoch:  2, iter:  22,800, lr:(5.000e-04,)] [eta: 62 days, 23:02:54, time (data): 2.397 (2.374)] L1Loss: 2.0807e-02 
+2022-09-28 23:03:13,526 INFO: [ESPCN..][epoch:  2, iter:  22,900, lr:(5.000e-04,)] [eta: 62 days, 21:12:01, time (data): 2.466 (2.444)] L1Loss: 2.9063e-02 
+2022-09-28 23:07:19,565 INFO: [ESPCN..][epoch:  2, iter:  23,000, lr:(5.000e-04,)] [eta: 62 days, 19:13:45, time (data): 2.557 (2.535)] L1Loss: 3.6628e-02 
+2022-09-28 23:11:19,189 INFO: [ESPCN..][epoch:  2, iter:  23,100, lr:(5.000e-04,)] [eta: 62 days, 17:09:12, time (data): 2.468 (2.444)] L1Loss: 2.7220e-02 
+2022-09-28 23:15:17,896 INFO: [ESPCN..][epoch:  2, iter:  23,200, lr:(5.000e-04,)] [eta: 62 days, 15:04:38, time (data): 2.451 (2.429)] L1Loss: 2.7739e-02 
+2022-09-28 23:20:22,963 INFO: [ESPCN..][epoch:  2, iter:  23,300, lr:(5.000e-04,)] [eta: 62 days, 14:15:56, time (data): 2.769 (2.746)] L1Loss: 2.4541e-02 
+2022-09-28 23:23:41,181 INFO: [ESPCN..][epoch:  2, iter:  23,400, lr:(5.000e-04,)] [eta: 62 days, 11:27:39, time (data): 1.930 (1.906)] L1Loss: 3.9587e-02 
+2022-09-28 23:27:46,872 INFO: [ESPCN..][epoch:  2, iter:  23,500, lr:(5.000e-04,)] [eta: 62 days, 9:33:50, time (data): 2.211 (2.188)] L1Loss: 3.1361e-02 
+2022-09-28 23:31:26,471 INFO: [ESPCN..][epoch:  2, iter:  23,600, lr:(5.000e-04,)] [eta: 62 days, 7:11:54, time (data): 2.070 (2.046)] L1Loss: 2.9546e-02 
+2022-09-28 23:34:52,946 INFO: [ESPCN..][epoch:  2, iter:  23,700, lr:(5.000e-04,)] [eta: 62 days, 4:36:35, time (data): 2.062 (2.039)] L1Loss: 3.2549e-02 
+2022-09-28 23:38:48,818 INFO: [ESPCN..][epoch:  2, iter:  23,800, lr:(5.000e-04,)] [eta: 62 days, 2:35:00, time (data): 2.265 (2.242)] L1Loss: 2.8568e-02 
+2022-09-28 23:42:10,208 INFO: [ESPCN..][epoch:  2, iter:  23,900, lr:(5.000e-04,)] [eta: 61 days, 23:56:29, time (data): 2.122 (2.099)] L1Loss: 2.5452e-02 
+2022-09-28 23:46:00,190 INFO: [ESPCN..][epoch:  2, iter:  24,000, lr:(5.000e-04,)] [eta: 61 days, 21:50:34, time (data): 2.388 (2.366)] L1Loss: 2.7479e-02 
+2022-09-28 23:49:48,036 INFO: [ESPCN..][epoch:  2, iter:  24,100, lr:(5.000e-04,)] [eta: 61 days, 19:43:20, time (data): 2.323 (2.300)] L1Loss: 2.6106e-02 
+2022-09-28 23:53:15,694 INFO: [ESPCN..][epoch:  2, iter:  24,200, lr:(5.000e-04,)] [eta: 61 days, 17:15:13, time (data): 2.094 (2.071)] L1Loss: 3.1648e-02 
+2022-09-28 23:57:09,430 INFO: [ESPCN..][epoch:  2, iter:  24,300, lr:(5.000e-04,)] [eta: 61 days, 15:16:28, time (data): 2.224 (2.202)] L1Loss: 3.1694e-02 
+2022-09-29 00:00:41,860 INFO: [ESPCN..][epoch:  2, iter:  24,400, lr:(5.000e-04,)] [eta: 61 days, 12:55:44, time (data): 2.075 (2.055)] L1Loss: 2.5593e-02 
+2022-09-29 00:05:17,642 INFO: [ESPCN..][epoch:  2, iter:  24,500, lr:(5.000e-04,)] [eta: 61 days, 11:44:01, time (data): 2.453 (2.431)] L1Loss: 2.8709e-02 
+2022-09-29 00:08:57,553 INFO: [ESPCN..][epoch:  2, iter:  24,600, lr:(5.000e-04,)] [eta: 61 days, 9:33:12, time (data): 2.224 (2.202)] L1Loss: 3.1537e-02 
+2022-09-29 00:12:40,266 INFO: [ESPCN..][epoch:  2, iter:  24,700, lr:(5.000e-04,)] [eta: 61 days, 7:26:24, time (data): 2.220 (2.199)] L1Loss: 3.2403e-02 
+2022-09-29 00:16:45,445 INFO: [ESPCN..][epoch:  2, iter:  24,800, lr:(5.000e-04,)] [eta: 61 days, 5:44:23, time (data): 2.581 (2.560)] L1Loss: 3.5596e-02 
+2022-09-29 00:20:31,154 INFO: [ESPCN..][epoch:  2, iter:  24,900, lr:(5.000e-04,)] [eta: 61 days, 3:42:37, time (data): 2.393 (2.371)] L1Loss: 2.9615e-02 
+2022-09-29 00:24:36,865 INFO: [ESPCN..][epoch:  2, iter:  25,000, lr:(5.000e-04,)] [eta: 61 days, 2:02:48, time (data): 2.269 (2.247)] L1Loss: 3.0492e-02 
+2022-09-29 00:24:37,776 INFO: Saving models and training states.
+2022-09-29 00:24:46,043 INFO: Validation [epoch 25000] Set5
+	 # psnr: 29.6015	Best: 29.6015 @ 25000 iter
+	 # ssim: 0.8412	Best: 0.8412 @ 25000 iter
+
+2022-09-29 00:29:01,431 INFO: [ESPCN..][epoch:  2, iter:  25,100, lr:(5.000e-04,)] [eta: 61 days, 0:43:27, time (data): 2.431 (2.409)] L1Loss: 3.0814e-02 
+2022-09-29 00:32:49,979 INFO: [ESPCN..][epoch:  2, iter:  25,200, lr:(5.000e-04,)] [eta: 60 days, 22:47:12, time (data): 2.206 (2.187)] L1Loss: 3.1619e-02 
+2022-09-29 00:37:33,023 INFO: [ESPCN..][epoch:  2, iter:  25,300, lr:(5.000e-04,)] [eta: 60 days, 21:48:22, time (data): 2.558 (2.536)] L1Loss: 3.1340e-02 
+2022-09-29 00:40:26,881 INFO: [ESPCN..][epoch:  2, iter:  25,400, lr:(5.000e-04,)] [eta: 60 days, 18:57:08, time (data): 1.583 (1.559)] L1Loss: 3.6067e-02 
+2022-09-29 00:44:05,221 INFO: [ESPCN..][epoch:  2, iter:  25,500, lr:(5.000e-04,)] [eta: 60 days, 16:53:01, time (data): 1.928 (1.904)] L1Loss: 3.3439e-02 
+2022-09-29 00:48:38,016 INFO: [ESPCN..][epoch:  2, iter:  25,600, lr:(5.000e-04,)] [eta: 60 days, 15:45:39, time (data): 2.439 (2.415)] L1Loss: 3.0278e-02 
+2022-09-29 00:52:18,762 INFO: [ESPCN..][epoch:  2, iter:  25,700, lr:(5.000e-04,)] [eta: 60 days, 13:45:38, time (data): 2.303 (2.279)] L1Loss: 2.6283e-02 
+2022-09-29 00:56:03,130 INFO: [ESPCN..][epoch:  2, iter:  25,800, lr:(5.000e-04,)] [eta: 60 days, 11:50:12, time (data): 2.430 (2.406)] L1Loss: 2.8305e-02 
+2022-09-29 00:59:55,024 INFO: [ESPCN..][epoch:  2, iter:  25,900, lr:(5.000e-04,)] [eta: 60 days, 10:03:15, time (data): 2.363 (2.340)] L1Loss: 3.0412e-02 
+2022-09-29 01:04:30,849 INFO: [ESPCN..][epoch:  2, iter:  26,000, lr:(5.000e-04,)] [eta: 60 days, 9:01:25, time (data): 2.632 (2.608)] L1Loss: 3.6481e-02 
+2022-09-29 01:09:38,737 INFO: [ESPCN..][epoch:  2, iter:  26,100, lr:(5.000e-04,)] [eta: 60 days, 8:32:15, time (data): 2.890 (2.864)] L1Loss: 2.9500e-02 
+2022-09-29 01:14:05,346 INFO: [ESPCN..][epoch:  2, iter:  26,200, lr:(5.000e-04,)] [eta: 60 days, 7:21:56, time (data): 2.268 (2.243)] L1Loss: 2.5148e-02 
+2022-09-29 01:19:10,691 INFO: [ESPCN..][epoch:  2, iter:  26,300, lr:(5.000e-04,)] [eta: 60 days, 6:50:45, time (data): 2.720 (2.696)] L1Loss: 2.7973e-02 
+2022-09-29 01:24:18,214 INFO: [ESPCN..][epoch:  2, iter:  26,400, lr:(5.000e-04,)] [eta: 60 days, 6:21:56, time (data): 2.713 (2.691)] L1Loss: 3.8194e-02 
+2022-09-29 01:29:45,312 INFO: [ESPCN..][epoch:  2, iter:  26,500, lr:(5.000e-04,)] [eta: 60 days, 6:12:40, time (data): 3.037 (3.015)] L1Loss: 3.5845e-02 
+2022-09-29 01:35:13,167 INFO: [ESPCN..][epoch:  2, iter:  26,600, lr:(5.000e-04,)] [eta: 60 days, 6:04:10, time (data): 3.341 (3.318)] L1Loss: 3.1087e-02 
+2022-09-29 01:40:50,455 INFO: [ESPCN..][epoch:  2, iter:  26,700, lr:(5.000e-04,)] [eta: 60 days, 6:04:58, time (data): 3.357 (3.333)] L1Loss: 3.0004e-02 
+2022-09-29 01:46:00,391 INFO: [ESPCN..][epoch:  2, iter:  26,800, lr:(5.000e-04,)] [eta: 60 days, 5:38:57, time (data): 3.560 (3.536)] L1Loss: 3.1276e-02 
+2022-09-29 01:51:02,698 INFO: [ESPCN..][epoch:  2, iter:  26,900, lr:(5.000e-04,)] [eta: 60 days, 5:05:39, time (data): 3.233 (3.210)] L1Loss: 2.6783e-02 
+2022-09-29 01:55:29,306 INFO: [ESPCN..][epoch:  2, iter:  27,000, lr:(5.000e-04,)] [eta: 60 days, 3:57:54, time (data): 3.029 (3.003)] L1Loss: 2.9359e-02 
+2022-09-29 01:59:40,817 INFO: [ESPCN..][epoch:  2, iter:  27,100, lr:(5.000e-04,)] [eta: 60 days, 2:36:01, time (data): 2.710 (2.686)] L1Loss: 2.7859e-02 
+2022-09-29 02:04:58,394 INFO: [ESPCN..][epoch:  2, iter:  27,200, lr:(5.000e-04,)] [eta: 60 days, 2:18:22, time (data): 3.128 (3.102)] L1Loss: 2.2434e-02 
+2022-09-29 02:09:44,675 INFO: [ESPCN..][epoch:  2, iter:  27,300, lr:(5.000e-04,)] [eta: 60 days, 1:30:46, time (data): 2.962 (2.937)] L1Loss: 3.0862e-02 
+2022-09-29 02:15:02,218 INFO: [ESPCN..][epoch:  2, iter:  27,400, lr:(5.000e-04,)] [eta: 60 days, 1:13:23, time (data): 3.166 (3.145)] L1Loss: 3.7075e-02 
+2022-09-29 02:19:10,571 INFO: [ESPCN..][epoch:  2, iter:  27,500, lr:(5.000e-04,)] [eta: 59 days, 23:50:09, time (data): 2.746 (2.724)] L1Loss: 2.4392e-02 
+2022-09-29 02:23:22,988 INFO: [ESPCN..][epoch:  2, iter:  27,600, lr:(5.000e-04,)] [eta: 59 days, 22:31:20, time (data): 2.538 (2.514)] L1Loss: 3.0127e-02 
+2022-09-29 02:27:53,307 INFO: [ESPCN..][epoch:  2, iter:  27,700, lr:(5.000e-04,)] [eta: 59 days, 21:30:01, time (data): 2.634 (2.610)] L1Loss: 2.6482e-02 
+2022-09-29 02:31:54,011 INFO: [ESPCN..][epoch:  2, iter:  27,800, lr:(5.000e-04,)] [eta: 59 days, 20:01:10, time (data): 2.558 (2.533)] L1Loss: 3.1287e-02 
+2022-09-29 02:36:01,296 INFO: [ESPCN..][epoch:  2, iter:  27,900, lr:(5.000e-04,)] [eta: 59 days, 18:39:08, time (data): 2.499 (2.476)] L1Loss: 2.7296e-02 
+2022-09-29 02:40:44,920 INFO: [ESPCN..][epoch:  2, iter:  28,000, lr:(5.000e-04,)] [eta: 59 days, 17:51:38, time (data): 2.605 (2.580)] L1Loss: 2.8353e-02 
+2022-09-29 02:44:34,076 INFO: [ESPCN..][epoch:  2, iter:  28,100, lr:(5.000e-04,)] [eta: 59 days, 16:13:40, time (data): 2.405 (2.381)] L1Loss: 3.3105e-02 
+2022-09-29 02:48:47,483 INFO: [ESPCN..][epoch:  2, iter:  28,200, lr:(5.000e-04,)] [eta: 59 days, 14:58:54, time (data): 2.593 (2.572)] L1Loss: 3.1250e-02 
+2022-09-29 02:53:00,481 INFO: [ESPCN..][epoch:  2, iter:  28,300, lr:(5.000e-04,)] [eta: 59 days, 13:44:15, time (data): 2.548 (2.526)] L1Loss: 3.3053e-02 
+2022-09-29 02:57:11,752 INFO: [ESPCN..][epoch:  2, iter:  28,400, lr:(5.000e-04,)] [eta: 59 days, 12:28:30, time (data): 2.409 (2.384)] L1Loss: 2.1486e-02 
+2022-09-29 03:01:41,465 INFO: [ESPCN..][epoch:  2, iter:  28,500, lr:(5.000e-04,)] [eta: 59 days, 11:30:13, time (data): 2.584 (2.561)] L1Loss: 2.9562e-02 
+2022-09-29 03:05:53,560 INFO: [ESPCN..][epoch:  2, iter:  28,600, lr:(5.000e-04,)] [eta: 59 days, 10:16:09, time (data): 2.527 (2.502)] L1Loss: 2.7726e-02 
+2022-09-29 03:10:23,183 INFO: [ESPCN..][epoch:  2, iter:  28,700, lr:(5.000e-04,)] [eta: 59 days, 9:18:35, time (data): 2.628 (2.604)] L1Loss: 3.6971e-02 
+2022-09-29 03:14:53,205 INFO: [ESPCN..][epoch:  2, iter:  28,800, lr:(5.000e-04,)] [eta: 59 days, 8:21:45, time (data): 2.905 (2.883)] L1Loss: 2.6981e-02 
+2022-09-29 03:19:09,975 INFO: [ESPCN..][epoch:  2, iter:  28,900, lr:(5.000e-04,)] [eta: 59 days, 7:13:15, time (data): 2.684 (2.663)] L1Loss: 3.0808e-02 
+2022-09-29 03:23:56,064 INFO: [ESPCN..][epoch:  2, iter:  29,000, lr:(5.000e-04,)] [eta: 59 days, 6:31:41, time (data): 2.310 (2.288)] L1Loss: 2.5945e-02 
+2022-09-29 03:28:41,850 INFO: [ESPCN..][epoch:  2, iter:  29,100, lr:(5.000e-04,)] [eta: 59 days, 5:50:06, time (data): 2.658 (2.637)] L1Loss: 2.8686e-02 
+2022-09-29 03:32:55,354 INFO: [ESPCN..][epoch:  2, iter:  29,200, lr:(5.000e-04,)] [eta: 59 days, 4:39:49, time (data): 2.949 (2.927)] L1Loss: 3.4160e-02 
+2022-09-29 03:37:04,294 INFO: [ESPCN..][epoch:  2, iter:  29,300, lr:(5.000e-04,)] [eta: 59 days, 3:25:54, time (data): 2.648 (2.625)] L1Loss: 3.4772e-02 
+2022-09-29 03:41:22,522 INFO: [ESPCN..][epoch:  2, iter:  29,400, lr:(5.000e-04,)] [eta: 59 days, 2:20:44, time (data): 2.340 (2.318)] L1Loss: 3.1549e-02 
+2022-09-29 03:45:50,048 INFO: [ESPCN..][epoch:  2, iter:  29,500, lr:(5.000e-04,)] [eta: 59 days, 1:24:14, time (data): 2.552 (2.529)] L1Loss: 3.3605e-02 
+2022-09-29 03:50:18,313 INFO: [ESPCN..][epoch:  2, iter:  29,600, lr:(5.000e-04,)] [eta: 59 days, 0:28:44, time (data): 2.558 (2.537)] L1Loss: 2.9767e-02 
+2022-09-29 03:54:21,927 INFO: [ESPCN..][epoch:  2, iter:  29,700, lr:(5.000e-04,)] [eta: 58 days, 23:11:52, time (data): 2.474 (2.451)] L1Loss: 3.1547e-02 
+2022-09-29 03:59:10,399 INFO: [ESPCN..][epoch:  2, iter:  29,800, lr:(5.000e-04,)] [eta: 58 days, 22:34:52, time (data): 2.946 (2.924)] L1Loss: 3.1674e-02 
+2022-09-29 04:04:06,734 INFO: [ESPCN..][epoch:  2, iter:  29,900, lr:(5.000e-04,)] [eta: 58 days, 22:04:58, time (data): 2.951 (2.928)] L1Loss: 2.9029e-02 
+2022-09-29 04:08:18,934 INFO: [ESPCN..][epoch:  2, iter:  30,000, lr:(5.000e-04,)] [eta: 58 days, 20:56:44, time (data): 2.242 (2.219)] L1Loss: 2.8388e-02 
+2022-09-29 04:08:19,840 INFO: Saving models and training states.
+2022-09-29 04:08:28,159 INFO: Validation [epoch 30000] Set5
+	 # psnr: 29.6570	Best: 29.6570 @ 30000 iter
+	 # ssim: 0.8428	Best: 0.8428 @ 30000 iter
+
+2022-09-29 04:12:49,394 INFO: [ESPCN..][epoch:  2, iter:  30,100, lr:(5.000e-04,)] [eta: 58 days, 20:04:49, time (data): 2.487 (2.465)] L1Loss: 3.2878e-02 
+2022-09-29 04:17:16,654 INFO: [ESPCN..][epoch:  2, iter:  30,200, lr:(5.000e-04,)] [eta: 58 days, 19:10:25, time (data): 3.004 (2.980)] L1Loss: 2.7482e-02 
+2022-09-29 04:21:24,805 INFO: [ESPCN..][epoch:  2, iter:  30,300, lr:(5.000e-04,)] [eta: 58 days, 17:59:52, time (data): 2.650 (2.629)] L1Loss: 3.3696e-02 
+2022-09-29 04:26:14,513 INFO: [ESPCN..][epoch:  2, iter:  30,400, lr:(5.000e-04,)] [eta: 58 days, 17:25:31, time (data): 2.260 (2.240)] L1Loss: 2.8468e-02 
+2022-09-29 04:31:07,084 INFO: [ESPCN..][epoch:  2, iter:  30,500, lr:(5.000e-04,)] [eta: 58 days, 16:53:48, time (data): 2.700 (2.676)] L1Loss: 3.3568e-02 
+2022-09-29 04:36:13,388 INFO: [ESPCN..][epoch:  3, iter:  30,600, lr:(5.000e-04,)] [eta: 58 days, 16:34:00, time (data): 4.001 (3.974)] L1Loss: 3.0411e-02 
+2022-09-29 04:40:43,363 INFO: [ESPCN..][epoch:  3, iter:  30,700, lr:(5.000e-04,)] [eta: 58 days, 15:43:21, time (data): 3.116 (3.090)] L1Loss: 3.4068e-02 
+2022-09-29 04:45:26,783 INFO: [ESPCN..][epoch:  3, iter:  30,800, lr:(5.000e-04,)] [eta: 58 days, 15:04:25, time (data): 2.766 (2.742)] L1Loss: 3.1139e-02 
+2022-09-29 04:49:10,819 INFO: [ESPCN..][epoch:  3, iter:  30,900, lr:(5.000e-04,)] [eta: 58 days, 13:35:27, time (data): 2.402 (2.378)] L1Loss: 2.1437e-02 
+2022-09-29 04:53:45,213 INFO: [ESPCN..][epoch:  3, iter:  31,000, lr:(5.000e-04,)] [eta: 58 days, 12:49:31, time (data): 2.821 (2.802)] L1Loss: 3.1617e-02 
+2022-09-29 04:57:48,699 INFO: [ESPCN..][epoch:  3, iter:  31,100, lr:(5.000e-04,)] [eta: 58 days, 11:37:51, time (data): 2.555 (2.533)] L1Loss: 3.2667e-02 
+2022-09-29 05:02:18,639 INFO: [ESPCN..][epoch:  3, iter:  31,200, lr:(5.000e-04,)] [eta: 58 days, 10:48:47, time (data): 2.352 (2.326)] L1Loss: 2.8342e-02 
+2022-09-29 05:06:13,813 INFO: [ESPCN..][epoch:  3, iter:  31,300, lr:(5.000e-04,)] [eta: 58 days, 9:30:59, time (data): 2.345 (2.322)] L1Loss: 2.3458e-02 
+2022-09-29 05:10:14,851 INFO: [ESPCN..][epoch:  3, iter:  31,400, lr:(5.000e-04,)] [eta: 58 days, 8:18:31, time (data): 2.208 (2.181)] L1Loss: 2.3737e-02 
+2022-09-29 05:15:04,018 INFO: [ESPCN..][epoch:  3, iter:  31,500, lr:(5.000e-04,)] [eta: 58 days, 7:46:26, time (data): 2.676 (2.653)] L1Loss: 3.1329e-02 
+2022-09-29 05:19:28,347 INFO: [ESPCN..][epoch:  3, iter:  31,600, lr:(5.000e-04,)] [eta: 58 days, 6:53:58, time (data): 3.020 (2.997)] L1Loss: 2.4528e-02 
+2022-09-29 05:23:55,192 INFO: [ESPCN..][epoch:  3, iter:  31,700, lr:(5.000e-04,)] [eta: 58 days, 6:03:53, time (data): 2.772 (2.751)] L1Loss: 3.3270e-02 
+2022-09-29 05:28:18,436 INFO: [ESPCN..][epoch:  3, iter:  31,800, lr:(5.000e-04,)] [eta: 58 days, 5:11:08, time (data): 3.451 (3.426)] L1Loss: 2.5704e-02 
+2022-09-29 05:32:22,406 INFO: [ESPCN..][epoch:  3, iter:  31,900, lr:(5.000e-04,)] [eta: 58 days, 4:02:54, time (data): 2.733 (2.710)] L1Loss: 3.2238e-02 
+2022-09-29 05:37:04,384 INFO: [ESPCN..][epoch:  3, iter:  32,000, lr:(5.000e-04,)] [eta: 58 days, 3:26:05, time (data): 3.062 (3.039)] L1Loss: 3.2362e-02 
+2022-09-29 05:41:00,220 INFO: [ESPCN..][epoch:  3, iter:  32,100, lr:(5.000e-04,)] [eta: 58 days, 2:11:56, time (data): 2.556 (2.533)] L1Loss: 2.8988e-02 
+2022-09-29 05:45:06,481 INFO: [ESPCN..][epoch:  3, iter:  32,200, lr:(5.000e-04,)] [eta: 58 days, 1:06:40, time (data): 2.359 (2.338)] L1Loss: 2.9255e-02 
+2022-09-29 05:49:37,771 INFO: [ESPCN..][epoch:  3, iter:  32,300, lr:(5.000e-04,)] [eta: 58 days, 0:22:01, time (data): 2.610 (2.588)] L1Loss: 2.8720e-02 
+2022-09-29 05:54:13,728 INFO: [ESPCN..][epoch:  3, iter:  32,400, lr:(5.000e-04,)] [eta: 57 days, 23:41:23, time (data): 2.426 (2.406)] L1Loss: 3.5109e-02 
+2022-09-29 05:59:01,901 INFO: [ESPCN..][epoch:  3, iter:  32,500, lr:(5.000e-04,)] [eta: 57 days, 23:10:48, time (data): 2.747 (2.725)] L1Loss: 2.3095e-02 
+2022-09-29 06:03:57,022 INFO: [ESPCN..][epoch:  3, iter:  32,600, lr:(5.000e-04,)] [eta: 57 days, 22:45:56, time (data): 3.002 (2.978)] L1Loss: 2.3028e-02 
+2022-09-29 06:08:38,730 INFO: [ESPCN..][epoch:  3, iter:  32,700, lr:(5.000e-04,)] [eta: 57 days, 22:10:29, time (data): 2.865 (2.842)] L1Loss: 2.5731e-02 
+2022-09-29 06:13:02,211 INFO: [ESPCN..][epoch:  3, iter:  32,800, lr:(5.000e-04,)] [eta: 57 days, 21:20:41, time (data): 2.913 (2.891)] L1Loss: 3.3871e-02 
+2022-09-29 06:18:12,950 INFO: [ESPCN..][epoch:  3, iter:  32,900, lr:(5.000e-04,)] [eta: 57 days, 21:08:42, time (data): 3.048 (3.026)] L1Loss: 2.9262e-02 
+2022-09-29 06:22:50,624 INFO: [ESPCN..][epoch:  3, iter:  33,000, lr:(5.000e-04,)] [eta: 57 days, 20:30:35, time (data): 2.846 (2.822)] L1Loss: 2.5501e-02 
+2022-09-29 06:27:16,739 INFO: [ESPCN..][epoch:  3, iter:  33,100, lr:(5.000e-04,)] [eta: 57 days, 19:43:33, time (data): 2.707 (2.684)] L1Loss: 2.7117e-02 
+2022-09-29 06:32:30,235 INFO: [ESPCN..][epoch:  3, iter:  33,200, lr:(5.000e-04,)] [eta: 57 days, 19:34:02, time (data): 2.901 (2.877)] L1Loss: 3.1232e-02 
+2022-09-29 06:37:53,101 INFO: [ESPCN..][epoch:  3, iter:  33,300, lr:(5.000e-04,)] [eta: 57 days, 19:31:54, time (data): 3.140 (3.116)] L1Loss: 2.8941e-02 
+2022-09-29 06:43:22,928 INFO: [ESPCN..][epoch:  3, iter:  33,400, lr:(5.000e-04,)] [eta: 57 days, 19:35:10, time (data): 3.531 (3.509)] L1Loss: 2.7560e-02 
+2022-09-29 06:48:54,329 INFO: [ESPCN..][epoch:  3, iter:  33,500, lr:(5.000e-04,)] [eta: 57 days, 19:39:38, time (data): 3.362 (3.340)] L1Loss: 3.3772e-02 
+2022-09-29 06:54:00,111 INFO: [ESPCN..][epoch:  3, iter:  33,600, lr:(5.000e-04,)] [eta: 57 days, 19:24:07, time (data): 3.216 (3.192)] L1Loss: 2.6914e-02 
+2022-09-29 06:58:52,605 INFO: [ESPCN..][epoch:  3, iter:  33,700, lr:(5.000e-04,)] [eta: 57 days, 18:58:23, time (data): 2.990 (2.967)] L1Loss: 2.8559e-02 
+2022-09-29 07:04:17,696 INFO: [ESPCN..][epoch:  3, iter:  33,800, lr:(5.000e-04,)] [eta: 57 days, 18:57:57, time (data): 3.031 (3.008)] L1Loss: 2.7323e-02 
+2022-09-29 07:08:54,042 INFO: [ESPCN..][epoch:  3, iter:  33,900, lr:(5.000e-04,)] [eta: 57 days, 18:19:56, time (data): 2.822 (2.799)] L1Loss: 2.6298e-02 
+2022-09-29 07:12:56,012 INFO: [ESPCN..][epoch:  3, iter:  34,000, lr:(5.000e-04,)] [eta: 57 days, 17:15:45, time (data): 1.941 (1.916)] L1Loss: 2.7631e-02 
+2022-09-29 07:17:26,475 INFO: [ESPCN..][epoch:  3, iter:  34,100, lr:(5.000e-04,)] [eta: 57 days, 16:33:43, time (data): 2.517 (2.494)] L1Loss: 3.9141e-02 
+2022-09-29 07:21:45,557 INFO: [ESPCN..][epoch:  3, iter:  34,200, lr:(5.000e-04,)] [eta: 57 days, 15:43:13, time (data): 2.263 (2.240)] L1Loss: 3.2260e-02 
+2022-09-29 07:26:29,273 INFO: [ESPCN..][epoch:  3, iter:  34,300, lr:(5.000e-04,)] [eta: 57 days, 15:11:43, time (data): 2.703 (2.682)] L1Loss: 3.2737e-02 
+2022-09-29 07:31:12,423 INFO: [ESPCN..][epoch:  3, iter:  34,400, lr:(5.000e-04,)] [eta: 57 days, 14:39:58, time (data): 2.581 (2.553)] L1Loss: 3.3955e-02 
+2022-09-29 07:35:33,179 INFO: [ESPCN..][epoch:  3, iter:  34,500, lr:(5.000e-04,)] [eta: 57 days, 13:51:25, time (data): 2.594 (2.570)] L1Loss: 3.0050e-02 
+2022-09-29 07:40:05,749 INFO: [ESPCN..][epoch:  3, iter:  34,600, lr:(5.000e-04,)] [eta: 57 days, 13:12:03, time (data): 2.550 (2.529)] L1Loss: 3.0446e-02 
+2022-09-29 07:44:48,073 INFO: [ESPCN..][epoch:  3, iter:  34,700, lr:(5.000e-04,)] [eta: 57 days, 12:40:12, time (data): 2.756 (2.736)] L1Loss: 3.3285e-02 
+2022-09-29 07:48:35,853 INFO: [ESPCN..][epoch:  3, iter:  34,800, lr:(5.000e-04,)] [eta: 57 days, 11:27:37, time (data): 1.981 (1.958)] L1Loss: 2.4024e-02 
+2022-09-29 07:53:19,494 INFO: [ESPCN..][epoch:  3, iter:  34,900, lr:(5.000e-04,)] [eta: 57 days, 10:57:12, time (data): 2.648 (2.625)] L1Loss: 2.5334e-02 
+2022-09-29 07:58:18,593 INFO: [ESPCN..][epoch:  3, iter:  35,000, lr:(5.000e-04,)] [eta: 57 days, 10:38:26, time (data): 4.005 (3.980)] L1Loss: 2.6269e-02 
+2022-09-29 07:58:18,902 INFO: Saving models and training states.
+2022-09-29 07:58:27,537 INFO: Validation [epoch 35000] Set5
+	 # psnr: 29.7105	Best: 29.7105 @ 35000 iter
+	 # ssim: 0.8445	Best: 0.8445 @ 35000 iter
+
+2022-09-29 08:03:13,540 INFO: [ESPCN..][epoch:  3, iter:  35,100, lr:(5.000e-04,)] [eta: 57 days, 10:16:40, time (data): 3.096 (3.073)] L1Loss: 2.7565e-02 
+2022-09-29 08:07:44,135 INFO: [ESPCN..][epoch:  3, iter:  35,200, lr:(5.000e-04,)] [eta: 57 days, 9:36:57, time (data): 3.107 (3.082)] L1Loss: 3.3127e-02 
+2022-09-29 08:11:59,906 INFO: [ESPCN..][epoch:  3, iter:  35,300, lr:(5.000e-04,)] [eta: 57 days, 8:46:29, time (data): 2.660 (2.636)] L1Loss: 3.2511e-02 
+2022-09-29 08:17:28,819 INFO: [ESPCN..][epoch:  3, iter:  35,400, lr:(5.000e-04,)] [eta: 57 days, 8:50:09, time (data): 3.265 (3.240)] L1Loss: 3.6373e-02 
+2022-09-29 08:22:18,555 INFO: [ESPCN..][epoch:  3, iter:  35,500, lr:(5.000e-04,)] [eta: 57 days, 8:25:00, time (data): 2.961 (2.938)] L1Loss: 3.4887e-02 
+2022-09-29 08:26:25,892 INFO: [ESPCN..][epoch:  3, iter:  35,600, lr:(5.000e-04,)] [eta: 57 days, 7:28:54, time (data): 2.109 (2.088)] L1Loss: 3.2064e-02 
+2022-09-29 08:31:10,975 INFO: [ESPCN..][epoch:  3, iter:  35,700, lr:(5.000e-04,)] [eta: 57 days, 7:00:40, time (data): 2.705 (2.681)] L1Loss: 2.3779e-02 
+2022-09-29 08:35:27,300 INFO: [ESPCN..][epoch:  3, iter:  35,800, lr:(5.000e-04,)] [eta: 57 days, 6:11:37, time (data): 2.756 (2.732)] L1Loss: 2.9833e-02 
+2022-09-29 08:40:22,753 INFO: [ESPCN..][epoch:  3, iter:  35,900, lr:(5.000e-04,)] [eta: 57 days, 5:51:14, time (data): 2.918 (2.895)] L1Loss: 2.6232e-02 
+2022-09-29 08:45:06,844 INFO: [ESPCN..][epoch:  3, iter:  36,000, lr:(5.000e-04,)] [eta: 57 days, 5:22:42, time (data): 3.605 (3.577)] L1Loss: 3.0758e-02 
+2022-09-29 08:50:04,854 INFO: [ESPCN..][epoch:  3, iter:  36,100, lr:(5.000e-04,)] [eta: 57 days, 5:04:21, time (data): 3.081 (3.056)] L1Loss: 3.2046e-02 
+2022-09-29 08:54:30,836 INFO: [ESPCN..][epoch:  3, iter:  36,200, lr:(5.000e-04,)] [eta: 57 days, 4:23:01, time (data): 2.578 (2.553)] L1Loss: 3.0101e-02 
+2022-09-29 08:59:12,402 INFO: [ESPCN..][epoch:  3, iter:  36,300, lr:(5.000e-04,)] [eta: 57 days, 3:53:05, time (data): 2.768 (2.746)] L1Loss: 3.3888e-02 
+2022-09-29 09:04:44,040 INFO: [ESPCN..][epoch:  3, iter:  36,400, lr:(5.000e-04,)] [eta: 57 days, 3:59:08, time (data): 3.484 (3.461)] L1Loss: 2.7472e-02 
+2022-09-29 09:08:40,178 INFO: [ESPCN..][epoch:  3, iter:  36,500, lr:(5.000e-04,)] [eta: 57 days, 2:56:56, time (data): 2.540 (2.517)] L1Loss: 2.9510e-02 
+2022-09-29 09:13:43,205 INFO: [ESPCN..][epoch:  3, iter:  36,600, lr:(5.000e-04,)] [eta: 57 days, 2:42:40, time (data): 2.016 (1.994)] L1Loss: 2.8725e-02 
+2022-09-29 09:18:27,162 INFO: [ESPCN..][epoch:  3, iter:  36,700, lr:(5.000e-04,)] [eta: 57 days, 2:14:56, time (data): 2.709 (2.685)] L1Loss: 3.0879e-02 
+2022-09-29 09:22:59,862 INFO: [ESPCN..][epoch:  3, iter:  36,800, lr:(5.000e-04,)] [eta: 57 days, 1:39:20, time (data): 4.616 (4.592)] L1Loss: 3.7369e-02 
+2022-09-29 09:27:33,625 INFO: [ESPCN..][epoch:  3, iter:  36,900, lr:(5.000e-04,)] [eta: 57 days, 1:04:40, time (data): 3.002 (2.978)] L1Loss: 2.9862e-02 
+2022-09-29 09:32:06,422 INFO: [ESPCN..][epoch:  3, iter:  37,000, lr:(5.000e-04,)] [eta: 57 days, 0:29:29, time (data): 2.504 (2.484)] L1Loss: 2.9863e-02 
+2022-09-29 09:35:25,906 INFO: [ESPCN..][epoch:  3, iter:  37,100, lr:(5.000e-04,)] [eta: 56 days, 23:02:59, time (data): 2.062 (2.038)] L1Loss: 2.1650e-02 
+2022-09-29 09:38:44,596 INFO: [ESPCN..][epoch:  3, iter:  37,200, lr:(5.000e-04,)] [eta: 56 days, 21:36:22, time (data): 1.934 (1.911)] L1Loss: 3.3288e-02 
+2022-09-29 09:43:16,389 INFO: [ESPCN..][epoch:  3, iter:  37,300, lr:(5.000e-04,)] [eta: 56 days, 21:01:16, time (data): 2.607 (2.586)] L1Loss: 3.2252e-02 
+2022-09-29 09:46:36,802 INFO: [ESPCN..][epoch:  3, iter:  37,400, lr:(5.000e-04,)] [eta: 56 days, 19:36:36, time (data): 1.743 (1.724)] L1Loss: 2.1313e-02 
+2022-09-29 09:51:27,540 INFO: [ESPCN..][epoch:  3, iter:  37,500, lr:(5.000e-04,)] [eta: 56 days, 19:15:06, time (data): 2.760 (2.737)] L1Loss: 3.2409e-02 
+2022-09-29 09:55:32,278 INFO: [ESPCN..][epoch:  3, iter:  37,600, lr:(5.000e-04,)] [eta: 56 days, 18:21:50, time (data): 2.512 (2.495)] L1Loss: 3.0157e-02 
+2022-09-29 10:00:28,577 INFO: [ESPCN..][epoch:  3, iter:  37,700, lr:(5.000e-04,)] [eta: 56 days, 18:04:27, time (data): 2.903 (2.881)] L1Loss: 2.3588e-02 
+2022-09-29 10:04:55,172 INFO: [ESPCN..][epoch:  3, iter:  37,800, lr:(5.000e-04,)] [eta: 56 days, 17:26:39, time (data): 2.273 (2.251)] L1Loss: 2.8688e-02 
+2022-09-29 10:09:35,693 INFO: [ESPCN..][epoch:  3, iter:  37,900, lr:(5.000e-04,)] [eta: 56 days, 16:58:37, time (data): 2.744 (2.721)] L1Loss: 2.7388e-02 
+2022-09-29 10:14:15,196 INFO: [ESPCN..][epoch:  3, iter:  38,000, lr:(5.000e-04,)] [eta: 56 days, 16:29:59, time (data): 2.515 (2.487)] L1Loss: 3.0286e-02 

@@ -1,0 +1,160 @@
+2022-10-09 11:14:08,433 INFO: 
+  name: ETDS_M7C48_x4
+  model_type: IRModel
+  scale: 4
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set14/GTmod12
+      dataroot_lq: datasets/Set14/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/BSDS100/GTmod12
+      dataroot_lq: datasets/BSDS100/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/Urban100/GTmod12
+      dataroot_lq: datasets/Urban100/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_5:[
+      name: DIV2K100
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/valid/HR/original
+      dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X4/original
+      filename_tmpl: {}x4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+  ]
+  network_g:[
+    type: ETDSForInference
+    num_in_ch: 3
+    num_out_ch: 3
+    upscale: 4
+    num_block: 7
+    num_feat: 48
+    num_residual_feat: 3
+  ]
+  resume:[
+    network_g_path: experiments/pretrained_models/ETDS/ETDS_M7C48_x4.pth
+    network_g_strict: True
+  ]
+  val:[
+    save_img: True
+    suffix: None
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 4
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 4
+        test_y_channel: True
+      ]
+    ]
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+  path:[
+    results_root: results/ETDS_M7C48_x4
+    log: results/ETDS_M7C48_x4
+    visualization: results/ETDS_M7C48_x4/visualization
+  ]
+
+2022-10-09 11:14:08,434 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-10-09 11:14:08,435 INFO: Number of test images in Set5: 5
+2022-10-09 11:14:08,437 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2022-10-09 11:14:08,437 INFO: Number of test images in Set14: 14
+2022-10-09 11:14:08,450 INFO: Dataset [PairedImageDataset] - B100 is built.
+2022-10-09 11:14:08,450 INFO: Number of test images in B100: 100
+2022-10-09 11:14:08,462 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2022-10-09 11:14:08,463 INFO: Number of test images in Urban100: 100
+2022-10-09 11:14:08,473 INFO: Dataset [PairedImageDataset] - DIV2K100 is built.
+2022-10-09 11:14:08,473 INFO: Number of test images in DIV2K100: 100
+2022-10-09 11:14:08,479 INFO: Network [ETDSForInference] is created.
+2022-10-09 11:14:28,167 INFO: ETDSForInference(
+  (conv_first): Conv2d(3, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (backbone_convs): ModuleList(
+    (0): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (2): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (conv_last): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv_clip): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1))
+  (upsampler): PixelShuffle(upscale_factor=4)
+)
+2022-10-09 11:14:28,168 INFO: Network: ETDSForInference, with parameters: 169968
+2022-10-09 11:14:28,169 INFO: Loading ETDSForInference model from experiments/pretrained_models/ETDS/ETDS_M7C48_x4.pth.
+2022-10-09 11:14:28,172 INFO: Model [IRModel] is created.
+2022-10-09 11:14:28,172 INFO: Testing Set5...
+2022-10-09 11:14:31,247 INFO: Validation [epoch ETDS_M7C48_x4] Set5
+	 # psnr: 31.6888	Best: 31.6888 @ ETDS_M7C48_x4 iter
+	 # ssim: 0.8889	Best: 0.8889 @ ETDS_M7C48_x4 iter
+
+2022-10-09 11:14:31,247 INFO: Testing Set14...
+2022-10-09 11:14:32,583 INFO: Validation [epoch ETDS_M7C48_x4] Set14
+	 # psnr: 28.3140	Best: 28.3140 @ ETDS_M7C48_x4 iter
+	 # ssim: 0.7751	Best: 0.7751 @ ETDS_M7C48_x4 iter
+
+2022-10-09 11:14:32,583 INFO: Testing B100...
+2022-10-09 11:14:37,335 INFO: Validation [epoch ETDS_M7C48_x4] B100
+	 # psnr: 27.3730	Best: 27.3730 @ ETDS_M7C48_x4 iter
+	 # ssim: 0.7302	Best: 0.7302 @ ETDS_M7C48_x4 iter
+
+2022-10-09 11:14:37,335 INFO: Testing Urban100...
+2022-10-09 11:15:00,226 INFO: Validation [epoch ETDS_M7C48_x4] Urban100
+	 # psnr: 25.4709	Best: 25.4709 @ ETDS_M7C48_x4 iter
+	 # ssim: 0.7643	Best: 0.7643 @ ETDS_M7C48_x4 iter
+
+2022-10-09 11:15:00,226 INFO: Testing DIV2K100...
+2022-10-09 11:16:15,824 INFO: Validation [epoch ETDS_M7C48_x4] DIV2K100
+	 # psnr: 30.0877	Best: 30.0877 @ ETDS_M7C48_x4 iter
+	 # ssim: 0.8289	Best: 0.8289 @ ETDS_M7C48_x4 iter
+

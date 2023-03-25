@@ -1,0 +1,161 @@
+2022-10-04 10:41:58,220 INFO: 
+  name: FSRCNN_x4
+  model_type: IRModel
+  scale: 4
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set14/GTmod12
+      dataroot_lq: datasets/Set14/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/BSDS100/GTmod12
+      dataroot_lq: datasets/BSDS100/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/Urban100/GTmod12
+      dataroot_lq: datasets/Urban100/LRbicx4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+    test_5:[
+      name: DIV2K100
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/valid/HR/original
+      dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X4/original
+      filename_tmpl: {}x4
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 4
+    ]
+  ]
+  network_g:[
+    type: FSRCNN
+    upscale: 4
+  ]
+  resume:[
+    network_g_path: experiments/pretrained_models/FSRCNN/FSRCNN_x4.pth
+    network_g_strict: True
+  ]
+  val:[
+    save_img: True
+    suffix: None
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 4
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 4
+        test_y_channel: True
+      ]
+    ]
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+  path:[
+    results_root: results/FSRCNN_x4
+    log: results/FSRCNN_x4
+    visualization: results/FSRCNN_x4/visualization
+  ]
+
+2022-10-04 10:41:58,221 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-10-04 10:41:58,221 INFO: Number of test images in Set5: 5
+2022-10-04 10:41:58,221 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2022-10-04 10:41:58,222 INFO: Number of test images in Set14: 14
+2022-10-04 10:41:58,224 INFO: Dataset [PairedImageDataset] - B100 is built.
+2022-10-04 10:41:58,224 INFO: Number of test images in B100: 100
+2022-10-04 10:41:58,227 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2022-10-04 10:41:58,227 INFO: Number of test images in Urban100: 100
+2022-10-04 10:41:58,229 INFO: Dataset [PairedImageDataset] - DIV2K100 is built.
+2022-10-04 10:41:58,230 INFO: Number of test images in DIV2K100: 100
+2022-10-04 10:41:58,251 INFO: Network [FSRCNN] is created.
+2022-10-04 10:41:59,564 INFO: FSRCNN(
+  (first_part): Sequential(
+    (0): Conv2d(3, 56, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (1): PReLU(num_parameters=56)
+  )
+  (mid_part): Sequential(
+    (0): Conv2d(56, 12, kernel_size=(1, 1), stride=(1, 1))
+    (1): PReLU(num_parameters=12)
+    (2): Conv2d(12, 12, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): PReLU(num_parameters=12)
+    (4): Conv2d(12, 12, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): PReLU(num_parameters=12)
+    (6): Conv2d(12, 12, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): PReLU(num_parameters=12)
+    (8): Conv2d(12, 12, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): PReLU(num_parameters=12)
+    (10): Conv2d(12, 56, kernel_size=(1, 1), stride=(1, 1))
+    (11): PReLU(num_parameters=56)
+  )
+  (last_part): ConvTranspose2d(56, 3, kernel_size=(9, 9), stride=(4, 4), padding=(4, 4), output_padding=(3, 3))
+)
+2022-10-04 10:41:59,564 INFO: Network: FSRCNN, with parameters: 24683
+2022-10-04 10:41:59,566 INFO: Loading FSRCNN model from experiments/pretrained_models/FSRCNN/FSRCNN_x4.pth.
+2022-10-04 10:41:59,569 INFO: Model [IRModel] is created.
+2022-10-04 10:41:59,570 INFO: Testing Set5...
+2022-10-04 10:42:01,717 INFO: Validation [epoch FSRCNN_x4] Set5
+	 # psnr: 30.7606	Best: 30.7606 @ FSRCNN_x4 iter
+	 # ssim: 0.8721	Best: 0.8721 @ FSRCNN_x4 iter
+
+2022-10-04 10:42:01,718 INFO: Testing Set14...
+2022-10-04 10:42:03,554 INFO: Validation [epoch FSRCNN_x4] Set14
+	 # psnr: 27.7356	Best: 27.7356 @ FSRCNN_x4 iter
+	 # ssim: 0.7609	Best: 0.7609 @ FSRCNN_x4 iter
+
+2022-10-04 10:42:03,559 INFO: Testing B100...
+2022-10-04 10:42:10,372 INFO: Validation [epoch FSRCNN_x4] B100
+	 # psnr: 27.0137	Best: 27.0137 @ FSRCNN_x4 iter
+	 # ssim: 0.7181	Best: 0.7181 @ FSRCNN_x4 iter
+
+2022-10-04 10:42:10,372 INFO: Testing Urban100...
+2022-10-04 10:42:44,307 INFO: Validation [epoch FSRCNN_x4] Urban100
+	 # psnr: 24.6605	Best: 24.6605 @ FSRCNN_x4 iter
+	 # ssim: 0.7330	Best: 0.7330 @ FSRCNN_x4 iter
+
+2022-10-04 10:42:44,309 INFO: Testing DIV2K100...
+2022-10-04 10:44:52,940 INFO: Validation [epoch FSRCNN_x4] DIV2K100
+	 # psnr: 29.5563	Best: 29.5563 @ FSRCNN_x4 iter
+	 # ssim: 0.8163	Best: 0.8163 @ FSRCNN_x4 iter
+

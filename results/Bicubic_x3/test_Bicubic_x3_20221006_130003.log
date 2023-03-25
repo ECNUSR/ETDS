@@ -1,0 +1,140 @@
+2022-10-06 13:00:03,370 INFO: 
+  name: Bicubic_x3
+  model_type: IRModel
+  scale: 3
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set5/GTmod12
+      dataroot_lq: datasets/Set5/LRbicx3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/Set14/GTmod12
+      dataroot_lq: datasets/Set14/LRbicx3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/BSDS100/GTmod12
+      dataroot_lq: datasets/BSDS100/LRbicx3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/Urban100/GTmod12
+      dataroot_lq: datasets/Urban100/LRbicx3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_5:[
+      name: DIV2K100
+      type: PairedImageDataset
+      dataroot_gt: datasets/DIV2K/valid/HR/original
+      dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X3/original
+      filename_tmpl: {}x3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+  ]
+  network_g:[
+    type: Bicubic
+    upscale: 3
+  ]
+  resume:[
+    network_g_path: None
+    network_g_strict: True
+  ]
+  val:[
+    save_img: True
+    suffix: None
+    pbar: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 3
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 3
+        test_y_channel: True
+      ]
+    ]
+  ]
+  lark: None
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+  path:[
+    results_root: results/Bicubic_x3
+    log: results/Bicubic_x3
+    visualization: results/Bicubic_x3/visualization
+  ]
+
+2022-10-06 13:00:03,370 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2022-10-06 13:00:03,371 INFO: Number of test images in Set5: 5
+2022-10-06 13:00:03,371 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2022-10-06 13:00:03,371 INFO: Number of test images in Set14: 14
+2022-10-06 13:00:03,374 INFO: Dataset [PairedImageDataset] - B100 is built.
+2022-10-06 13:00:03,374 INFO: Number of test images in B100: 100
+2022-10-06 13:00:03,377 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2022-10-06 13:00:03,378 INFO: Number of test images in Urban100: 100
+2022-10-06 13:00:03,381 INFO: Dataset [PairedImageDataset] - DIV2K100 is built.
+2022-10-06 13:00:03,381 INFO: Number of test images in DIV2K100: 100
+2022-10-06 13:00:03,381 INFO: Network [Bicubic] is created.
+2022-10-06 13:00:03,382 INFO: Bicubic()
+2022-10-06 13:00:03,382 INFO: Network: Bicubic, with parameters: 0
+2022-10-06 13:00:03,382 INFO: Model [IRModel] is created.
+2022-10-06 13:00:03,382 INFO: Testing Set5...
+2022-10-06 13:00:08,718 INFO: Validation [epoch Bicubic_x3] Set5
+	 # psnr: 30.6109	Best: 30.6109 @ Bicubic_x3 iter
+	 # ssim: 0.8719	Best: 0.8719 @ Bicubic_x3 iter
+
+2022-10-06 13:00:08,718 INFO: Testing Set14...
+2022-10-06 13:00:12,858 INFO: Validation [epoch Bicubic_x3] Set14
+	 # psnr: 27.7853	Best: 27.7853 @ Bicubic_x3 iter
+	 # ssim: 0.7811	Best: 0.7811 @ Bicubic_x3 iter
+
+2022-10-06 13:00:12,858 INFO: Testing B100...
+2022-10-06 13:00:37,728 INFO: Validation [epoch Bicubic_x3] B100
+	 # psnr: 27.3097	Best: 27.3097 @ Bicubic_x3 iter
+	 # ssim: 0.7453	Best: 0.7453 @ Bicubic_x3 iter
+
+2022-10-06 13:00:37,728 INFO: Testing Urban100...
+2022-10-06 13:01:29,217 INFO: Validation [epoch Bicubic_x3] Urban100
+	 # psnr: 24.5757	Best: 24.5757 @ Bicubic_x3 iter
+	 # ssim: 0.7396	Best: 0.7396 @ Bicubic_x3 iter
+
+2022-10-06 13:01:29,217 INFO: Testing DIV2K100...
+2022-10-06 13:04:26,182 INFO: Validation [epoch Bicubic_x3] DIV2K100
+	 # psnr: 29.8014	Best: 29.8014 @ Bicubic_x3 iter
+	 # ssim: 0.8341	Best: 0.8341 @ Bicubic_x3 iter
+

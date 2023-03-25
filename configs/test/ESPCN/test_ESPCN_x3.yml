@@ -1,0 +1,72 @@
+# general settings
+name: ESPCN_x3
+model_type: IRModel
+scale: 3
+num_gpu: 1
+manual_seed: 0
+
+# dataset and data loader settings
+datasets:
+  test_1:
+    name: Set5
+    type: PairedImageDataset
+    dataroot_gt: datasets/Set5/GTmod12
+    dataroot_lq: datasets/Set5/LRbicx3
+    io_backend:
+      type: disk
+  test_2:
+    name: Set14
+    type: PairedImageDataset
+    dataroot_gt: datasets/Set14/GTmod12
+    dataroot_lq: datasets/Set14/LRbicx3
+    io_backend:
+      type: disk
+  test_3:
+    name: B100
+    type: PairedImageDataset
+    dataroot_gt: datasets/BSDS100/GTmod12
+    dataroot_lq: datasets/BSDS100/LRbicx3
+    io_backend:
+      type: disk
+  test_4:
+    name: Urban100
+    type: PairedImageDataset
+    dataroot_gt: datasets/Urban100/GTmod12
+    dataroot_lq: datasets/Urban100/LRbicx3
+    io_backend:
+      type: disk
+  test_5:
+    name: DIV2K100
+    type: PairedImageDataset
+    dataroot_gt: datasets/DIV2K/valid/HR/original
+    dataroot_lq: datasets/DIV2K/valid/LR/bicubic/X3/original
+    filename_tmpl: '{}x3'
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: ESPCN
+  colors: 3
+  upscale: 3
+
+# resume
+resume:
+  network_g_path: experiments/pretrained_models/ESPCN/ESPCN_x3.pth
+  network_g_strict: true
+
+# validation settings
+val:
+  save_img: true
+  suffix: ~
+  pbar: True
+
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 3
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim
+      crop_border: 3
+      test_y_channel: true
