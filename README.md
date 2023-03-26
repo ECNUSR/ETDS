@@ -1,4 +1,4 @@
-# <font color='#4CB963'>E</font><font color='#A0EADE'>T</font><font color='#5C6784'>D</font><font color='#1D263B'>S</font>: <font color='#4CB963'>E</font>quivalent <font color='#A0EADE'>T</font>ransformation and <font color='#5C6784'>D</font>ual <font color="#1D263B">S</font>tream Network Construction for Mobile Image Super-Resolution
+# <font color='#4CB963'>E</font><font color='#A0EADE'>T</font><font color='#5C6784'>D</font><font color='#1D263B'>S</font>: <font color='#4CB963'>E</font>quivalent <font color='#A0EADE'>T</font>ransformation and <font color='#5C6784'>D</font>ual <font color="#1D263B">S</font>tream Network Construction for Mobile Image Super-Resolution (CVPR 2023)
 <img src="asserts/images/name.png"/>
 
 By [Jiahao Chao](https://github.com/CCjiahao), [Zhou Zhou](https://github.com/2019zhou), [Hongfan Gao](https://github.com/hongfangao), [Jiali Gong](https://github.com/gongjiali), Zhengfeng Yang*, Zhenbing Zeng, Lydia Dehbi (*Corresponding author).
@@ -10,7 +10,7 @@ The previous version of ETDS, [PureConvSR](https://github.com/ECNUSR/PureConvSR-
 <center>
     <img style="border-radius: 0.3125em; box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="./asserts/images/psnr_latency.png">
     <br>
-    <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px;">Comparisons of PSNR performance and the inference latency of different models.</div>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px;">Comparisons of PSNR performance and the inference latency of different models. The inference latency is tested on Dimensity 8100 SoC, NNAPI driver, INT8 precision and upsampling from 360 × 640 to 1080 × 1920. PSNR indexes are evaluated on Set5.</div>
 </center>
 
 ## Contents
@@ -23,8 +23,7 @@ The previous version of ETDS, [PureConvSR](https://github.com/ECNUSR/PureConvSR-
     - [Convert](#convert)
     - [Validition](#validition)
     - [Results](#results)
-  - [Core File List](#core-file-list)
-  - [Citations](#citations)
+  - [✨Core File List](#core-file-list)
   - [License](#license)
   - [Acknowledgments](#acknowledgments)
 
@@ -156,7 +155,7 @@ where `{configs-path}` represents the path to the configuration file. All config
 </p>
 </details> -->
 
-##  Core File List
+## ✨Core File List
 This repository is based on [BasicSR](https://github.com/XPixelGroup/BasicSR)'s code framework and has undergone secondary development. Here we point out the core files of this repository (Descending order of importance):
 
 - [core/archs/ir/ETDS/arch.py](core/archs/ir/ETDS/arch.py) : ETDS architecture
@@ -166,7 +165,7 @@ This repository is based on [BasicSR](https://github.com/XPixelGroup/BasicSR)'s 
 - [train.py](train.py) : Model training pipeline
 - [test.py](test.py) : Model testing pipeline
 - [core/models/ir/etds_model.py](core/models/ir/etds_model.py) : An implementation of the model interface for pipeline calls.
-- [validation/reparameterization.py](scripts/validation/reparameterization.py) : Verify the correctness of the description of reparameterization in the appendix.
+- [validation/reparameterization.py](scripts/validation/reparameterization.py)😊: Verify the correctness of the description of reparameterization in the appendix.
 
 ## License
 This project is released under the [Apache 2.0 license](LICENSE.txt).
