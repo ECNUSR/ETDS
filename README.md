@@ -3,7 +3,7 @@
 
 By [Jiahao Chao](https://github.com/CCjiahao), [Zhou Zhou](https://github.com/2019zhou), [Hongfan Gao](https://github.com/hongfangao), [Jiali Gong](https://github.com/gongjiali), Zhengfeng Yang*, Zhenbing Zeng, Lydia Dehbi (*Corresponding author).
 
-This is the official Pytorch implementation of [Equivalent Transformation and Dual Stream Network Construction for Mobile Image Super-Resolution](comming_soon).
+This is the official Pytorch implementation of Equivalent Transformation and Dual Stream Network Construction for Mobile Image Super-Resolution ([paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Chao_Equivalent_Transformation_and_Dual_Stream_Network_Construction_for_Mobile_Image_CVPR_2023_paper.pdf)/ [supp](https://openaccess.thecvf.com/content/CVPR2023/supplemental/Chao_Equivalent_Transformation_and_CVPR_2023_supplemental.pdf)).
 
 The previous version of ETDS, [PureConvSR](https://github.com/ECNUSR/PureConvSR-AIM2022), won the third place in the Mobile AI & AIM: Real-Time Image Super-Resolution Challenge ([website](https://data.vision.ee.ethz.ch/cvl/aim22/) / [report](https://arxiv.org/abs/2211.05910)).
 
@@ -14,7 +14,7 @@ The previous version of ETDS, [PureConvSR](https://github.com/ECNUSR/PureConvSR-
 </center>
 
 ## Contents
-- [<font color='#4CB963'>E</font><font color='#A0EADE'>T</font><font color='#5C6784'>D</font><font color='#1D263B'>S</font>: <font color='#4CB963'>E</font>quivalent <font color='#A0EADE'>T</font>ransformation and <font color='#5C6784'>D</font>ual <font color="#1D263B">S</font>tream Network Construction for Mobile Image Super-Resolution](#font-color4cb963efontfont-colora0eadetfontfont-color5c6784dfontfont-color1d263bsfont-font-color4cb963efontquivalent-font-colora0eadetfontransformation-and-font-color5c6784dfontual-font-color1d263bsfonttream-network-construction-for-mobile-image-super-resolution)
+- [ETDS: Equivalent Transformation and Dual Stream Network Construction for Mobile Image Super-Resolution (CVPR 2023)](#etds-equivalent-transformation-and-dual-stream-network-construction-for-mobile-image-super-resolution-cvpr-2023)
   - [Contents](#contents)
   - [Introduction](#introduction)
   - [Get Started](#get-started)
@@ -25,6 +25,7 @@ The previous version of ETDS, [PureConvSR](https://github.com/ECNUSR/PureConvSR-
     - [Results](#results)
   - [✨Core File List](#core-file-list)
   - [License](#license)
+  - [Citation](#citation)
   - [Acknowledgments](#acknowledgments)
 
 ## Introduction
@@ -169,6 +170,18 @@ This repository is based on [BasicSR](https://github.com/XPixelGroup/BasicSR)'s 
 
 ## License
 This project is released under the [Apache 2.0 license](LICENSE.txt).
+
+## Citation
+```
+@InProceedings{Chao_2023_CVPR,
+    author    = {Chao, Jiahao and Zhou, Zhou and Gao, Hongfan and Gong, Jiali and Yang, Zhengfeng and Zeng, Zhenbing and Dehbi, Lydia},
+    title     = {Equivalent Transformation and Dual Stream Network Construction for Mobile Image Super-Resolution},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2023},
+    pages     = {14102-14111}
+}
+```
 
 ## Acknowledgments
 Our code is inspired by [ABPN](https://github.com/NJU-Jet/SR_Mobile_Quantization), [ECBSR](https://github.com/xindongzhang/ECBSR) and [BasicSR](https://github.com/XPixelGroup/BasicSR).
